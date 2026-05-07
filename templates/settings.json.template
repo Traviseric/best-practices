@@ -1,0 +1,19 @@
+{
+  "_comment": "Place this file at .claude/settings.json in your project root. Replace <project-path> and the build command with your stack's equivalent. See docs/PRE_COMMIT_BUILD_GATE.md for stack-specific commands.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "if": "Bash(git commit:*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"<project-path>\" && npx next build --no-lint > /dev/null 2>&1 || echo '{\"continue\":false,\"reason\":\"next build failed\"}'",
+            "timeout": 180,
+            "statusMessage": "Build check before commit..."
+          }
+        ]
+      }
+    ]
+  }
+}

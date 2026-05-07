@@ -1,0 +1,37 @@
+# .claudeignore — files the agent should skip when searching/reading
+
+# Binary files (agent can't read these, wastes tokens trying)
+**/*.pdf
+**/*.docx
+**/*.xlsx
+**/*.pptx
+**/*.zip
+**/*.tar.gz
+
+# Dependencies (massive, never useful)
+node_modules/
+.next/
+dist/
+build/
+__pycache__/
+*.pyc
+.venv/
+venv/
+target/
+
+# Archives (old docs that pollute search results)
+ARCHIVE/
+docs/historical/
+
+# Large generated files
+*.min.js
+*.min.css
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+poetry.lock
+
+# Secrets / env (in case they get committed by mistake)
+.env
+.env.*
+!.env.example

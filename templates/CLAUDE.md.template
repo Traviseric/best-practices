@@ -1,0 +1,43 @@
+# Project: [Your Project Name]
+
+## What This Is
+One-line description of what this project does.
+
+## Lookup Table
+| Concept | Files | Search Terms |
+|---------|-------|--------------|
+| [Main Feature] | src/[folder]/ | [keywords] |
+| Auth | src/auth/, src/middleware/auth.ts | login, JWT, session |
+| API | src/routes/api/ | endpoint, handler, POST |
+| Database | prisma/schema.prisma, src/db/ | query, model, migration |
+| Testing | __tests__/, src/**/*.test.ts | vitest, mock, expect |
+| Config | src/config/, .env.example | environment, settings |
+
+## Stack
+- Framework: [e.g., Next.js 15]
+- ORM: [e.g., Prisma]
+- Testing: [e.g., Vitest]
+
+## Commands
+```bash
+npm run build    # Build (must pass before commit)
+npm test         # Run tests
+npm run dev      # Start dev server
+npm run lint     # Check code style
+```
+
+## Conventions
+- TDD: Write failing tests first
+- Structure: Feature-based
+- Naming: camelCase (JS), kebab-case (files)
+- Comments: Why, not what
+
+## Current Focus
+[What's actively being worked on. Link to spec if applicable.]
+
+---
+
+**Notes for agents:**
+- Keep this file under 100 lines (target: 60).
+- If you trim a section, ensure it has a home in `docs/` and link to it from the lookup table above.
+- See: https://github.com/Traviseric/best-practices for the full playbook.

@@ -1,0 +1,324 @@
+# Best Practices for AI Coding Agents
+
+Principles that make AI agents (Claude Code, Codex, Cursor, Aider, etc.) work better on your projects.
+
+---
+
+## 📚 Related Guides
+
+| Guide | Topics Covered |
+|-------|----------------|
+| [Pre-Commit Build Gate](docs/PRE_COMMIT_BUILD_GATE.md) | The single highest-leverage hook for any repo |
+| [AGENTS.md Contract](docs/AGENTS_MD_CONTRACT.md) | Stable entrypoint pointer for tool-portable repos |
+| [MCP Optimization](docs/MCP_OPTIMIZATION.md) | CLI vs MCP, token costs, config switching |
+| [Doc Organization](docs/DOC_ORGANIZATION.md) | Clean root, docs/ structure, naming conventions |
+| [Audit Your Project](docs/AUDIT_YOUR_PROJECT.md) | Run an agent audit, scorecard, recommendations |
+| [Engineering Principles](docs/ENGINEERING_PRINCIPLES.md) | Core principles for AI-first development |
+| [Patterns](docs/PATTERNS.md) | Fresh context, file-based state, handoffs |
+| [Web Design Principles](docs/WEB_DESIGN_PRINCIPLES.md) | Building sites with AI agents |
+
+---
+
+## CLAUDE.md Setup
+
+Every project needs a `CLAUDE.md` file in the root. This is the agent's instruction manual.
+
+### Keep It Short
+- **Target: < 100 lines** (ideally 60)
+- Agents read this every session
+- Long files waste context tokens
+- If it's over 100 lines, split into linked docs
+
+### Use Lookup Tables
+Instead of prose, use tables. Agents parse these efficiently:
+
+```markdown
+## Lookup Table
+| Concept | Files | Search Terms |
+|---------|-------|--------------|
+| Auth | src/auth/, src/middleware/auth.ts | login, JWT, session |
+| API | src/routes/api/ | endpoint, handler, POST |
+| Database | prisma/schema.prisma, src/db/ | query, model, migration |
+| Testing | __tests__/, src/**/*.test.ts | vitest, mock, expect |
+| Config | src/config/, .env.example | environment, settings |
+```
+
+**Why this works:**
+- Agent knows exactly where to look
+- Reduces searching/guessing
+- Search terms help find related code
+
+### Include Commands
+```markdown
+## Commands
+```bash
+npm run build    # Build (must pass before commit)
+npm test         # Run tests
+npm run lint     # Check code style
+```
+```
+
+### State Current Focus
+```markdown
+## Current Focus
+Building user dashboard - see specs/dashboard.md
+```
+
+### ⚠️ No Content Loss When Trimming CLAUDE.md
+
+**Every section removed from CLAUDE.md must survive in a linked doc.** New agent sessions only see CLAUDE.md automatically — if content isn't linked, it's lost.
+
+When trimming CLAUDE.md to < 100 lines:
+1. **Identify every section being removed** (roadmap tables, file maps, brand guide, etc.)
+2. **Verify each has a home** in `docs/`, `specs/`, or another tracked file
+3. **If no home exists, create one** (e.g., `docs/brand.md`, `docs/architecture.md`)
+4. **Link from CLAUDE.md** via the lookup table or a direct reference
+5. **Link from `docs/README.md`** so the master index stays complete
+
+The lookup table in CLAUDE.md is the bridge — it tells future sessions where to find everything that was trimmed out.
+
+---
+
+## Context Window Basics
+
+Claude has a 200K token context window, but you don't get all of it. Understanding the real budget prevents agent degradation mid-task.
+
+### The Real Budget
+
+```
+TOTAL: ~176K usable tokens (not 200K)
+
+Fixed overhead:
+- Model/harness overhead:  ~32K
+- CLAUDE.md:                ~2K
+- MCP servers:             0-50K (varies by config!)
+─────────────────────────────
+Available for work:        92-142K
+```
+
+MCP servers are the biggest variable. Each server injects tool definitions into context. If you have 5+ MCP servers enabled, you may be burning 40-50K tokens before the agent reads a single file. Use `CLI > MCP` when possible (see [MCP Optimization](docs/MCP_OPTIMIZATION.md)).
+
+### Warning Thresholds
+
+| Token Usage | Status | Action |
+|-------------|--------|--------|
+| 0-50K | 🟢 Safe | Work normally |
+| 50-100K | 🟡 Monitor | Keep tasks focused |
+| 100-150K | 🟠 Wrap up | Finish current task, don't start new ones |
+| 150K+ | 🔴 Reset | Agent quality degrades — start fresh context |
+
+### Why This Matters for Overnight Runs
+- Each worker gets a fresh context (good)
+- But if a single task is too large, the agent hits 150K+ and starts producing lower quality output
+- Keep tasks to **5-15 minutes of focused work** to stay in the green/yellow zone
+- If an agent's output looks sloppy or repetitive, the task was probably too big
+
+---
+
+## The 10 Principles
+
+### 1. One Task = One Context
+- Each agent session should do ONE thing
+- 5-15 minutes of focused work
+- Don't ask for "build the whole feature"
+- Break it into specific tasks
+
+### 2. Fresh Context Every Time
+- Agents don't remember previous sessions
+- Each worker starts clean
+- Write handoffs so next worker has context
+- Don't rely on "we discussed this earlier"
+
+### 3. Specific Tasks Get Specific Results
+
+**Bad:**
+```markdown
+- [ ] Add authentication
+```
+
+**Good:**
+```markdown
+- [ ] Create login form component at src/components/LoginForm.tsx with email/password fields
+- [ ] Add POST /api/auth/login endpoint that validates credentials and returns JWT
+- [ ] Write tests for LoginForm component (test validation, submission, error states)
+```
+
+### 4. Include Acceptance Criteria
+```markdown
+- [ ] Add user profile page - DONE when: page loads user data, shows avatar, edit button works, tests pass
+```
+
+### 5. Order Tasks by Dependency
+Put setup tasks before tasks that depend on them:
+```markdown
+- [ ] Create database schema for users table
+- [ ] Add User model with TypeScript types
+- [ ] Create API endpoint to fetch user
+- [ ] Build UI component to display user
+```
+
+### 6. Tests = Quality Gate
+- Include "run tests" or "verify build passes" in tasks
+- Agents should not mark complete if tests fail
+- Tests catch mistakes before you wake up
+
+### 7. Git is Your Safety Net
+- Agents commit their work
+- Review commits in the morning
+- `git diff` shows exactly what changed
+- `git revert` if something went wrong
+
+### 8. Delegate, Don't Micromanage
+
+**Micromanaging (bad):**
+```markdown
+- [ ] Create function called validateEmail that takes string parameter email and uses regex /^[^\s@]+@[^\s@]+\.[^\s@]+$/ to return boolean
+```
+
+**Delegating (good):**
+```markdown
+- [ ] Add email validation to the signup form. Follow existing validation patterns in the codebase.
+```
+
+### 9. Working Code Only
+- Agents should commit code that runs
+- No placeholder comments like "// TODO: implement this"
+- If it can't be fully done, note what's missing
+
+### 10. Review the Handoffs
+- Check the agent's run logs / handoff files
+- See what the agent did and struggled with
+- Use this to write better tasks next time
+
+---
+
+## .claudeignore
+
+Add a `.claudeignore` file to your project root. This tells Claude which files to skip when searching your codebase. Without it, agents waste tokens reading files they can't use and may hit "Request too large" errors.
+
+```
+# .claudeignore
+
+# Binary files (Claude can't read these, wastes tokens trying)
+**/*.pdf
+**/*.docx
+**/*.xlsx
+**/*.pptx
+
+# Dependencies (massive, never useful)
+node_modules/
+.next/
+dist/
+build/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Archives (old docs that pollute search results)
+ARCHIVE/
+docs/historical/
+
+# Large generated files
+*.min.js
+*.min.css
+package-lock.json
+yarn.lock
+```
+
+**Why this matters:**
+- PDFs cause "Request too large" errors that kill agent sessions
+- `node_modules/` has thousands of files that slow down searches
+- Old archived docs surface stale information during agent searches
+- Every file Claude reads costs context tokens
+
+**Pro tip:** If your project has PDFs the agent needs, convert them to markdown first and reference the `.md` version.
+
+---
+
+## Project Structure That Works
+
+Agents work best with organized projects:
+
+```
+your-project/
+├── CLAUDE.md              # Agent instructions (required)
+├── .claudeignore          # Files to skip (recommended)
+├── src/
+│   ├── components/        # UI components
+│   ├── routes/            # API routes
+│   ├── services/          # Business logic
+│   └── utils/             # Helpers
+├── tests/                 # Test files
+├── docs/                  # Documentation
+│   └── specs/             # Feature specifications
+├── package.json           # Dependencies & scripts
+└── tsconfig.json          # TypeScript config
+```
+
+**Key points:**
+- Feature-based organization (not type-based)
+- Consistent naming conventions
+- Tests next to or mirroring source structure
+- Specs in docs/ for complex features
+
+---
+
+## Common Mistakes
+
+### Too Many Tasks at Once
+❌ 50 tasks in TASKS.md
+✅ 5-10 focused tasks per overnight run
+
+### Vague Tasks
+❌ "Improve the UI"
+✅ "Add loading spinner to submit button in LoginForm.tsx"
+
+### No CLAUDE.md
+❌ Agent guesses about project structure
+✅ Agent knows exactly where things are
+
+### Ignoring Handoffs
+❌ Never read what the agent wrote
+✅ Review handoffs, learn, improve tasks
+
+### No Tests
+❌ Agent makes changes, no verification
+✅ Tests catch issues automatically
+
+### No .claudeignore
+❌ Agent chokes on PDFs, wastes tokens searching node_modules
+✅ Agent only searches relevant source files
+
+---
+
+## Quick Checklist
+
+Before running overnight:
+
+- [ ] CLAUDE.md exists and is < 100 lines
+- [ ] .claudeignore excludes PDFs, node_modules, and archives
+- [ ] Lookup table maps concepts to files
+- [ ] Build/test commands are documented
+- [ ] Tasks are specific with acceptance criteria
+- [ ] Tasks are ordered by dependency
+- [ ] Git repo is clean (commit current work)
+- [ ] Tests exist and pass currently
+
+---
+
+## Learn More
+
+**Free Resources:**
+- [AI Builders Lab](https://www.skool.com/ai-builders-lab-6883) - Free community for AI-first builders
+- [AI-First Fundamentals](https://traviseric.com/courses/ai-first-fundamentals) - 37 lessons on engineering principles
+- [README](README.md) - Repo entry point and how to use this playbook
+- [MCP Optimization](docs/MCP_OPTIMIZATION.md) - Optimize your MCP servers
+
+**Go Deeper:**
+- [Complete AI Development System](https://traviseric.com/products/ai-development-system) - Full ruleset + enhanced agent framework
+- [AI Orchestra Method](https://traviseric.com/courses/ai-orchestra-method) - Scale to many parallel agent instances
+- [Travis Eric — Consulting](https://traviseric.com) - For teams adopting AI-first development
+
+**Community:**
+- [AI Builders Lab on Skool](https://www.skool.com/ai-builders-lab-6883) - Share builds, get feedback, learn patterns
