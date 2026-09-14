@@ -1,0 +1,44 @@
+{
+  "_comment": [
+    "The pre-commit BUILD GATE: the single highest-leverage hook. Before any `git commit`,",
+    "run your stack's cheapest 'does it still compile / collect' command. If it fails, the",
+    "commit is denied with the reason, and the agent fixes the build before landing it.",
+    "",
+    "Drop this block into .claude/settings.json under hooks.PreToolUse (or use",
+    "templates/settings.json.template, which wires this plus the two guards).",
+    "",
+    "Pick ONE command for your stack and put it where `<build-command>` is:",
+    "  Next.js:      npx next build --no-lint",
+    "  TypeScript:   npx tsc --noEmit",
+    "  Rust:         cargo check",
+    "  Go:           go build ./...",
+    "  Python:       python -m pytest --collect-only -q",
+    "  .NET:         dotnet build --no-restore",
+    "",
+    "Notes:",
+    "  - `if: Bash(git commit:*)` scopes the hook to commits only; add/push/status pass untouched.",
+    "  - `cd \"$CLAUDE_PROJECT_DIR\"` keeps the gate on the repo the session opened, so a",
+    "    compound `cd elsewhere && git commit` still builds the right tree.",
+    "  - Keep the timeout honest. A gate that times out reads as a failure; if your build",
+    "    takes 5 minutes, use a cheaper check (tsc --noEmit, pytest --collect-only).",
+    "  - Run it the way CI runs it. CI often sets CI=true, which turns warnings into errors.",
+    "  - On Windows the same command works from Git Bash. From PowerShell use",
+    "    `Set-Location $env:CLAUDE_PROJECT_DIR; <build-command>` and `\"shell\": \"powershell\"`."
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit:*)",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && <build-command> > /dev/null 2>&1 || echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Build failed. Fix the build before committing.\"}}'",
+            "timeout": 180,
+            "statusMessage": "Build check before commit..."
+          }
+        ]
+      }
+    ]
+  }
+}

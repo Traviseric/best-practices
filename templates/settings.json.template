@@ -1,16 +1,57 @@
 {
-  "_comment": "Place this file at .claude/settings.json in your project root. Replace <project-path> and the build command with your stack's equivalent. See docs/PRE_COMMIT_BUILD_GATE.md for stack-specific commands.",
+  "_comment": [
+    "Place this file at .claude/settings.json in your project root, and copy the hooks/",
+    "folder from this repo to .claude/hooks/. Three PreToolUse hooks fire on `git commit`:",
+    "  1. build gate         - your stack's cheapest compile/collect check (replace <build-command>)",
+    "  2. staged-secrets     - denies a commit whose STAGED files carry a live provider key",
+    "  3. conflict-markers   - denies a commit whose STAGED files carry <<<<<<< ======= >>>>>>>",
+    "Both guards read only the index, fail OPEN on any error, and have an escape token.",
+    "See docs/HOOKS.md and docs/PRE_COMMIT_BUILD_GATE.md.",
+    "",
+    "POSIX (macOS, Linux, Git Bash on Windows): the .sh lines below work as written.",
+    "Windows with PowerShell as the hook shell: swap each guard command for",
+    "  \"shell\": \"powershell\",",
+    "  \"command\": \"pwsh -NoProfile -ExecutionPolicy Bypass -File \\\"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-staged-secrets.ps1\\\"\"",
+    "(use `powershell` instead of `pwsh` on Windows PowerShell 5.1). The build gate becomes",
+    "  \"command\": \"Set-Location $env:CLAUDE_PROJECT_DIR; <build-command> *> $null; if (-not $?) { '{\\\"hookSpecificOutput\\\":{\\\"hookEventName\\\":\\\"PreToolUse\\\",\\\"permissionDecision\\\":\\\"deny\\\",\\\"permissionDecisionReason\\\":\\\"Build failed.\\\"}}' }\"",
+    "",
+    "Build command per stack: next build --no-lint | tsc --noEmit | cargo check | go build ./... | python -m pytest --collect-only -q"
+  ],
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "if": "Bash(git commit:*)",
         "hooks": [
           {
             "type": "command",
-            "command": "cd \"<project-path>\" && npx next build --no-lint > /dev/null 2>&1 || echo '{\"continue\":false,\"reason\":\"next build failed\"}'",
+            "if": "Bash(git commit:*)",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && <build-command> > /dev/null 2>&1 || echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Build failed. Fix the build before committing.\"}}'",
             "timeout": 180,
             "statusMessage": "Build check before commit..."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit:*)",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-staged-secrets.sh\"",
+            "timeout": 30,
+            "statusMessage": "Checking staged files for credentials"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit:*)",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-conflict-markers.sh\"",
+            "timeout": 30,
+            "statusMessage": "Checking for merge-conflict markers"
           }
         ]
       }
