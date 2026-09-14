@@ -87,20 +87,22 @@ The lookup table in CLAUDE.md is the bridge — it tells future sessions where t
 
 ## Context Window Basics
 
-Claude has a 200K token context window, but you don't get all of it. Understanding the real budget prevents agent degradation mid-task.
+Whatever the model's advertised context window is (it has grown from 200K to over a million tokens in a year), you don't get all of it, and quality degrades well before the hard limit. Understanding the real budget prevents agent degradation mid-task.
 
 ### The Real Budget
 
 ```
-TOTAL: ~176K usable tokens (not 200K)
+TOTAL: the advertised window, minus fixed overhead
 
-Fixed overhead:
+Fixed overhead (a 200K-window example; the shape holds at any size):
 - Model/harness overhead:  ~32K
 - CLAUDE.md:                ~2K
 - MCP servers:             0-50K (varies by config!)
 ─────────────────────────────
-Available for work:        92-142K
+Available for work:        92-142K of 200K
 ```
+
+The thresholds below are for a 200K window. On a larger window, scale them, but keep the rule: the agent's judgement gets worse long before the context is full, so a fresh context per task still wins.
 
 MCP servers are the biggest variable. Each server injects tool definitions into context. If you have 5+ MCP servers enabled, you may be burning 40-50K tokens before the agent reads a single file. Use `CLI > MCP` when possible (see [MCP Optimization](docs/MCP_OPTIMIZATION.md)).
 
