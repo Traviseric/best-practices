@@ -115,3 +115,9 @@ Full protocol, failure-mode taxonomy, and worked examples: `references/01-three-
 - Success for a real document: the runner exits 0 and a human has signed off every row. If it
   exits nonzero, read the blocked rows, fix the claim (rewrite, remove, or source it),
   re-verify that row, and re-run. Never edit the gate to ship.
+
+---
+
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `skills/definition-of-done/SKILL.md`.

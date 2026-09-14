@@ -143,3 +143,9 @@ claude_desktop_config.full.json      # Rare, specific tasks
 For advanced MCP optimization including custom server development and token budgeting:
 
 - **Premium Guides**: [Complete AI Development System](https://traviseric.com/products/ai-development-system) — Includes the full MCP Development Guide
+
+---
+
+Provenance: from a private operating system, kept current in this repository at github.com/Traviseric/best-practices.
+
+Next: `docs/HOOKS.md`.

@@ -48,3 +48,9 @@ Rules:
 ## Variations
 
 If your team's primary tool is Codex, flip it: maintain `AGENTS.md` as the playbook, and let `CLAUDE.md` be the pointer. The pattern is the same — pick one canonical file, point others at it.
+
+---
+
+Provenance: from a private operating system, kept current in this repository at github.com/Traviseric/best-practices.
+
+Next: `AGENTS.md` (this repo runs its own contract).

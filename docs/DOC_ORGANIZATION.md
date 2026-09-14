@@ -203,3 +203,9 @@ How to verify it works.
 
 **Go Deeper:**
 - [Complete AI Development System](https://traviseric.com/products/ai-development-system) — Includes the full documentation organization guide
+
+---
+
+Provenance: from a private operating system, kept current in this repository at github.com/Traviseric/best-practices.
+
+Next: `best-practices.md` (the lookup-table pattern).

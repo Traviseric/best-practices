@@ -55,3 +55,9 @@ You are not marked wrong for the tilt, and you are not excused from the work by 
 ---
 
 *Forged by losing a decision with a correct record and an unspoken story, September 2026. The full register (the notes, the guard, the running log) lives in the author's private system; this pack is the shareable form and is complete on its own.*
+
+---
+
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `skills/room-and-ground/SKILL.md`.

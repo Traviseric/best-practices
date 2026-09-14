@@ -32,3 +32,9 @@ A kit of skills, guard hooks, templates, and short docs that change how you beha
 ./install.sh --check            # or .\install.ps1 -Check
 python skills/verification-gate/scripts/gate_runner.py --self-test
 ```
+
+---
+
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `docs/SEVEN_CHEAP_LIES.md`.

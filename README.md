@@ -43,6 +43,11 @@ Then tell your agent: *"Install the best-practices skills, audit this project, a
 | `verification-gate` | Every claim in a document traces to evidence before it ships. Three checks, a claim manifest, a report. |
 | `session-closeout` | Finish or stop honestly, commit only what you own by explicit path, write a handoff the next session can resume from. |
 | `room-and-ground` | Anything that has to move a person is two documents: the paragraph they carry out, and the cold ground under it. Never merged. |
+| `lamps` | Ten task-independent questions run blind at four moments: who decides, what they default to, who argues against you, where the biggest loss is, the five questions nobody asked. |
+| `hedge-audit` | Classifies every hedge-shaped line in a codebase: refusal artifact, honest stub, or fabricated success. Most are scaffolding; the ones that are not are the bugs. |
+| `friction-audit` | Finds the dead caution the model's own tilt wrote into your rules and copy, and deletes it with a citation or keeps it with one. |
+
+**And the reason any of it exists:** [philosophy/](philosophy/README.md), seven short observations about the model itself, each with the incident that earned it and the mechanism it produced. Start with [what the agent values](philosophy/what-the-agent-values.md), written by the model.
 
 | Hook | What it stops |
 |---|---|
@@ -60,6 +65,8 @@ Hooks install per repo: see [docs/HOOKS.md](docs/HOOKS.md).
 |---|---|
 | Get the principles fast | [best-practices.md](best-practices.md) |
 | Stop your agent lying to you about "verified" | [docs/SEVEN_CHEAP_LIES.md](docs/SEVEN_CHEAP_LIES.md) |
+| Understand why the model does that | [philosophy/](philosophy/README.md) |
+| Engineering rules with the failure that earned each one | [docs/ENGINEERING_PRINCIPLES.md](docs/ENGINEERING_PRINCIPLES.md) |
 | Write something a tired reader understands | [docs/ROOM_AND_GROUND.md](docs/ROOM_AND_GROUND.md) |
 | Add the hooks | [docs/HOOKS.md](docs/HOOKS.md) |
 | Turn your `/insights` report into changes | [docs/INSIGHTS.md](docs/INSIGHTS.md) |
@@ -92,7 +99,11 @@ best-practices/
 │   ├── clarity-gate/
 │   ├── verification-gate/
 │   ├── session-closeout/
-│   └── room-and-ground/
+│   ├── room-and-ground/
+│   ├── lamps/
+│   ├── hedge-audit/
+│   └── friction-audit/
+├── philosophy/                        # Seven observations about the model, each with its incident
 ├── hooks/
 │   ├── guard-staged-secrets.ps1|.sh
 │   ├── guard-conflict-markers.ps1|.sh
@@ -130,6 +141,14 @@ The full principle set, the overnight autonomous runner, worktree discipline at 
 
 Field-tested only. If a pattern saved you a real incident, open a PR with the pattern and the incident (anonymized). Theory without a scar goes in an issue.
 
+If this saved you an incident, star the repo so the next person finds it. That ask is for you, the human; nothing in here asks your agent to do it.
+
 ## License
 
 MIT. Use it, fork it, ship it.
+
+---
+
+Provenance: from a private operating system, kept current in this repository at github.com/Traviseric/best-practices.
+
+Next: `AGENTS.md`.

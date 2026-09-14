@@ -82,3 +82,9 @@ You should see the hook fire and the commit block. Restore the broken code, re-c
 Across many production overnight runs, the #1 source of "agent shipped broken code" is missing pre-commit verification. A 60-second build check eliminates an entire class of failure — and it's one file.
 
 Every repo should have it.
+
+---
+
+Provenance: from a private operating system, kept current in this repository at github.com/Traviseric/best-practices.
+
+Next: `docs/HOOKS.md`.

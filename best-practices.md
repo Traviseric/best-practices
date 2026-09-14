@@ -330,3 +330,9 @@ Before running overnight:
 
 **Community:**
 - [AI Builders Lab on Skool](https://www.skool.com/ai-builders-lab-6883) - Share builds, get feedback, learn patterns
+
+---
+
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `AGENTS.md`.

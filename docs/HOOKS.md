@@ -65,3 +65,11 @@ For a conflict marker: resolve the conflict, restage, commit again. If the file 
 ## Adding a fourth guard
 
 Same shape: read stdin JSON, scope to the command you care about, read only the index, deny with a reason someone can act on in under a minute, fail open on everything else. Measure the false-positive rate on your own repos before wiring it. A guard qualifies when it triggers rarely, checks cheaply, fails open, denies only objectively broken states, and has a measured false-positive rate of zero.
+
+---
+
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Note on `install.sh --check`: it compares the copies in `~/.claude/skills` with this repo. If another system already installs skills with the same names there (the author's own machines do), the check reports drift that is not yours. Test against a throwaway home (`HOME=/tmp/x ./install.sh`) before reading a drift report as a bug.
+
+Next: `docs/SEVEN_CHEAP_LIES.md`.

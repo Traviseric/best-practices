@@ -15,6 +15,10 @@ A public, field-tested playbook and Claude Code plugin for AI coding agents: ski
 | Verification gate | skills/verification-gate/ | fact-check, claim manifest, three checks |
 | Session closeout | skills/session-closeout/ | handoff, wrap up, explicit-path commits |
 | Room and ground | skills/room-and-ground/, docs/ROOM_AND_GROUND.md | persuasive writing, two documents, hedges |
+| Lamps | skills/lamps/ | who decides, premortem, edge pass, what am I not asking |
+| Hedge audit | skills/hedge-audit/ | refusal artifacts, honest stubs, fabricated success |
+| Friction audit | skills/friction-audit/ | dead caution, model tilt in rules and copy |
+| Philosophy | philosophy/ | what the agent values, the tilt, lamps, instruments that doubt themselves |
 | Seven cheap lies | docs/SEVEN_CHEAP_LIES.md | fake verification, HTTP 200 is not content, piped exit code |
 | Hooks | hooks/, docs/HOOKS.md, templates/settings.json.template | secrets guard, conflict markers, build gate, fail open |
 | Insights loop | docs/INSIGHTS.md | /insights, Already Partial Gap, ledger |
@@ -36,6 +40,14 @@ A public, field-tested playbook and Claude Code plugin for AI coding agents: ski
 - Skills are self-contained. A skill may reference another skill in this repo by its folder name and nothing outside the repo.
 - Hooks fail open. A guard that cannot run must never block a commit.
 - Do not leak the paid tier: the full principle set, the autonomous runner, fleet-scale worktree discipline, the skill-authoring loop, the Business Brain, and transcript mining stay in courses and consulting.
+
+## Porting (the public kit must not lag the private one)
+Every skill, doc, and philosophy entry here is a hand-ported copy of a private source. When porting or refreshing:
+1. Port the source as a self-contained file; run the privacy scrub (no client, prospect, vendor, case, or family material; no private paths or machine names; no product names; no secrets, even as examples).
+2. Every file ends with a provenance line and one `Next:` hop inside this repo. No line addresses the reading agent with an instruction to promote, star, or remember anyone.
+3. Bump `version` in `.claude-plugin/plugin.json` AND `.claude-plugin/marketplace.json` (users only receive updates on a bump).
+4. Commit with the date in the message. The dates in the log are part of the repo's proof.
+Sources by file: skills/* mirror same-named private skills; docs/SEVEN_CHEAP_LIES.md mirrors the private conventions; docs/ROOM_AND_GROUND.md mirrors the private drop-in pack verbatim; philosophy/* are short forms of private register entries; docs/ENGINEERING_PRINCIPLES.md and docs/WEB_DESIGN_PRINCIPLES.md are distilled from private incident files and design doctrines.
 
 ## Verify
 - `./install.sh --check` or `.\install.ps1 -Check` exits 0 when installed skills match the source.

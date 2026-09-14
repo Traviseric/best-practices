@@ -205,3 +205,9 @@ D:\path\to\best-practices\best-practices.md
 - [Complete AI Development System](https://traviseric.com/products/ai-development-system) - Advanced guides including full codebase design patterns
 - [AI Orchestra Method](https://traviseric.com/courses/ai-orchestra-method) - Scale to many parallel instances
 - [Travis Eric — Consulting](https://traviseric.com) - For teams adopting AI-first development
+
+---
+
+Provenance: from a private operating system, kept current in this repository at github.com/Traviseric/best-practices.
+
+Next: `skills/definition-of-done/SKILL.md`.

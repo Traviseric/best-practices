@@ -46,3 +46,9 @@ one pass.
 After each /insights report: archive privately, grade each suggestion Already/Partial/Gap,
 file gaps as a CLAUDE.md rule, a hook, a skill, or a backlog task, and log it in the ledger.
 ```
+
+---
+
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `skills/session-closeout/SKILL.md`.

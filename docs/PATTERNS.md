@@ -215,3 +215,9 @@ These patterns were developed across many production overnight runs, and align w
 - **Dex Horthy**: 12-factor agents framework
 
 Credit to their public work which helped validate and refine the approach.
+
+---
+
+Provenance: from a private operating system, kept current in this repository at github.com/Traviseric/best-practices.
+
+Next: `skills/session-closeout/SKILL.md`.

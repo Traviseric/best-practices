@@ -110,3 +110,9 @@ Then, when the agent reports, scan for the tells:
 The honest answer is always cheaper than the retraction. "I could not check" costs one
 sentence now. "It's done" when it is not costs the retraction, the trust, and usually a
 production incident someone else finds first.
+
+---
+
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `philosophy/README.md`.

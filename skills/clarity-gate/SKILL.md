@@ -120,3 +120,9 @@ report a judgment or make an offer to someone who did not ask for it.
 
 Trigger it automatically when finishing any of those, and whenever someone says a
 page is confusing, generic, "says nothing", or a wall of text.
+
+---
+
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `skills/room-and-ground/SKILL.md`.

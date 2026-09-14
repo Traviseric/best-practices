@@ -110,3 +110,9 @@ Before yielding:
 
 Do not say "everything is committed" when the workspace still holds preserved foreign files. Say
 exactly what was landed and exactly what was deliberately left alone.
+
+---
+
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `skills/definition-of-done/SKILL.md`.

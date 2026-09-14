@@ -139,3 +139,9 @@ blocker, and stop there.
    effect of a real call), not mere reachability.
 4. Put every production canary on one board. A detector reporting to its own silo is a
    detector nobody reads.
+
+---
+
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `README.md` (the loop closes here; start again at the top).

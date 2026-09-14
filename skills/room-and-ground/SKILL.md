@@ -48,3 +48,9 @@ marker says where that sentence belongs instead.
 Hedging inside the room. Turning a narrative into a table. Splitting the audience into two so
 the ledger survives. Handing the taste decision back to the human. Each time: stop, ask which
 document you are in, file the sentence in the other one.
+
+---
+
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `docs/ENGINEERING_PRINCIPLES.md`.
