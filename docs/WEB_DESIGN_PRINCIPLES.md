@@ -1,378 +1,159 @@
 # Web Design Principles for AI Agents
 
-A framework for building web projects that look custom, not templated. These principles teach agents (and developers) how to think about design — not which CSS values to use.
+Thirteen rules, each stated as the thing an agent would have done wrong, each with the site that paid for it and the mechanism that now stops it. They come from one site factory that builds and runs marketing sites for local businesses (gyms, restaurants, roofers, contractors, a bar), mostly by agents, between June and September 2026. Dates are by month. Business names are removed. The mechanisms are real: a screenshot loop, a checklist with a scoring cap, a photo pass, a cold walk on a phone. Several ship in this repository.
+
+If you only read one thing: rule 1. Every other defect on this page was invisible to a build, a curl, and a grep, and obvious in one screenshot.
 
 ---
 
-## The Problem
+## 1. You would have shipped a page you never looked at
 
-AI agents default to the same output: blue/purple gradients, identical card grids, generic hero sections, "Revolutionary AI platform" headlines. Every site looks like it was built from the same template. The fix isn't better prompts — it's giving the agent a design *framework* that forces unique output every time.
+**The rule.** A page the agent has not seen rendered does not exist yet. Build exit codes, HTTP 200s, and grepping for class names are text proxies for a visual product. No screenshots, no ship.
 
----
+**The incident.** July 2026: a bar's marketing site shipped after every text check passed. The owner's verdict on the live page: "this looks like shit." A muddy hero with the headline on a brown blur, eleven identical staff-pick boxes with no rhythm, all-dark sections mushing together, tiny gallery tiles. Looking back across the factory, every visual defect on every site to that date (orange body text on an orange page at a gym, white-on-white at a builder) had been caught by the founder's eyes and never by the pipeline. The agent had rationalized a dead browser extension into "visual pass pending" and shipped blind.
 
-## The 3-Layer Model
+**The mechanism.** A portable Playwright harness shoots every page at phone (390x844) and desktop (1440x900), full page, after walking the page so lazy images load (a full-page capture without the scroll walk returns black tiles). The composition skill refuses to mark a pass complete without the screenshot paths in the report, and if the harness is blocked it reports the exact blocked command and the word UNVERIFIED.
 
-Three layers. Each builds on the one above it.
+**Apply it.** Put a shoot script in every site repo and make "screenshot paths in the PR" a review requirement. Never accept "visual pass pending".
 
-```
-Layer 1: PRINCIPLES   How to think about design (universal, any project)
-Layer 2: SYSTEM       The reusable project architecture (tokens, components, scaffolding)
-Layer 3: INSTANCES    Each deployed project (your site, customized from Layer 2)
-```
+## 2. You would have scored your own render and called it good
 
-**Layer 1** is what you're reading now — design thinking that applies to any project. It teaches *taste*.
+**The rule.** Critique against best-in-class reference screenshots for the client's archetype, not against your own sense of whether it looks fine. Three to five rounds during composition, not one review after.
 
-**Layer 2** is the automated machine — a single app architecture where you feed in brand identity and get a fully wired project out. Design tokens, component library, feature modules.
+**The incident.** Same bar, same month. Round one looked acceptable to the agent that made it. The fix was a library of reference captures (three top bars, phone and desktop) and a rule that composition starts by ripping structure, rhythm, and motion choreography from a reference (never its images, copy, or brand). The home page reached rubric-clear in four rounds against those references. First-render blindness is exactly what the loop exists to catch, so round two is mandatory even when round one scores well.
 
-**Layer 3** is each specific project — your ice cream shop, your SaaS dashboard, your consulting site. Each one is an *instance* of the Layer 2 system, customized with its own identity.
+**The mechanism.** Step zero of every design flow is capture-and-autopsy of a reference. A model transforms a concrete reference far better than it generates taste from nothing.
 
-The key insight: **Layer 1 principles should produce different results every time.** If two projects built from this framework look the same, something went wrong. The principles teach how to think, not what to output.
+**Apply it.** Keep a `design-references/<archetype>/` folder of full-page captures. Write the autopsy (what the reference does with rhythm, surfaces, motion) before the first line of markup.
 
----
+## 3. You would have shipped the client's photos raw
 
-## Concept First, Code Never First
+**The rule.** Client and founder photos never ship as uploaded. They pass a brand-grade treatment (consistent tone, deep blacks, one accent glow) so the set reads as one shoot.
 
-The single biggest difference between a site that looks "templated" and one that looks custom is whether the builder started with a concept or a layout.
+**The incident.** July 2026: the bar's eighteen owner-supplied photos were converted and dropped in. Mixed white balance, mixed exposure, one at a phone's vertical aspect. The site looked like a scrapbook and the owner wanted it to feel like a ten-thousand-dollar bottle. Grading them through an image model fixed the feel in one pass, and then exposed the next trap: the model garbled legible label text on the bottles ("SINGLE WAST SCOTCH"). Label-legible shots now get a deterministic tone grade of the original instead, and every graded output is inspected.
 
-### Start With a Tension
+**The mechanism.** A photo-grade script with a per-client recipe, a manifest recording which images were model-graded and which were tone-graded, and a rule that the script never overwrites sources.
 
-Before any wireframe, name a conceptual tension — two ideas that don't normally go together. The friction between them is what makes a design feel intentional and memorable.
+**Apply it.** Grade the set before composing. Inspect every output for text and faces. Keep the originals.
 
-**Examples:**
-- "A Bloomberg terminal crossed with a luxury watch face"
-- "What if a scientific journal had a dark mode app?"
-- "Mission control for a boutique fashion brand"
-- "Brutalist concrete gallery showing delicate data"
+## 4. You would have labeled the placeholder
 
-This concept becomes your decision filter. Every ambiguous choice — should this be rounded or sharp? Should this animate or stay still? — gets answered by asking: "does this feel like [concept]?"
+**The rule.** If an image or artifact would need a visible badge to be honest, it does not ship. Swap it for real material, for neutral atmosphere that makes no claim about the business, or for nothing.
 
-Don't reuse these examples. Invent one genuinely specific to what you're building.
+**The incident.** August 2026, twice: a clinic and a dent-repair shop both shipped with visible "sample imagery" chips on mood photos. Both had to be stripped from live sites after the owner saw them. Earlier, a parallel asset pass had generated lifestyle scenes (diners on a deck, a catering spread) and swapped them into a real restaurant's pages as if they were the venue. The failure is not that a generated image exists; it is that an unlabeled representation gets treated as documentary proof of a real place, dish, or crowd, and the "fix" of labeling it reads amateur.
 
-### Declare a Mode
+**The mechanism.** Honesty bookkeeping is internal: the manifest and plain alt text are the record. The chassis sample tag is empty on every client surface, and any surface that depends on real photos (a funnel, a gallery) stays off until real photos exist. A mock artifact showing fabricated numbers never ships at all.
 
-Two valid design modes. Pick one before writing a line of code.
+**Apply it.** Grep your components for words like "sample", "illustrative", "placeholder", "TODO". If any renders to the public, the section is not ready.
 
-**Mode A: Marketing & Landing Pages** — "Show, Don't Sell"
-The site demonstrates real capabilities. No flash for its own sake.
+## 5. You would have trusted the tokens you inherited
 
-**Mode B: Dashboards & Interactive Apps** — "Cinematic Precision"
-Every interaction should feel premium and alive. A dashboard that looks like an MVP has failed.
+**The rule.** Audit token values against the brand before building on them. Names stay stable; values lie.
 
-### Declare an Identity Direction
+**The incident.** June 2026: a contractor's site was forked from a working template. The `brand-*` tokens still held the previous client's indigo, so a warm brand rendered cold and generic, and nobody noticed because the names were right. The following month a gym rendered with an orange page background and red body text because the token generator mapped brand colors into neutral slots (secondary into the paper background, primary into the text color). A third site's display font silently never rendered because a custom utility shadowed the framework's generated one.
 
-Choose a high-level aesthetic posture. This isn't a color palette — it's a *feeling*:
+**The mechanism.** The token generator now enforces a semantic contract: near-white surfaces, near-black ink, brand primary as accent, opaque tints, and an explicit weight map for fonts that demand one. New scaffolds render correctly with zero hand tuning, and that is proven on each new client by a lint that reports 0/0.
 
-| Direction | Feel | Typical Signals |
-|-----------|------|-----------------|
-| Luxury Dark | Deep, warm, restrained | Serif headlines, muted metallics, slow motion |
-| Organic Tech | Living systems, clinical precision | Teal/green, biological curves, breathing animations |
-| Brutalist Signal | Raw, aggressive clarity | Monospace, high contrast, sharp edges |
-| Clinical Boutique | Vast space, extreme restraint | Near-white, minimal chrome, whisper-thin borders |
-| Cinematic Data | Film-noir meets telemetry | Deep shadows, glowing accents, ambient light |
-| Editorial Craft | Magazine meets product | Mixed serif/sans, editorial grid, generous photography |
+**Apply it.** Before the first page, open the token file and read the values, not the names. Put a contrast check on the CI path.
 
-These are starting points, not destinations. The best results come from blending or subverting directions.
+## 6. You would have built the wall of cards
 
----
+**The rule.** Repeating collections get editorial hierarchy: never more than six identical boxes, and never a three-column icon-title-two-gray-lines grid standing in for a real section.
 
-## Universal Principles
+**The incident.** The eleven-box wall on the bar site (rule 1); a four-column "model / lead services / qualification" stat strip on a contractor's site that read like a SaaS pricing page and leaked operations language onto a premium trade; every generated site's default hero (headline, subline, two buttons, nothing else). The factory keeps a cheap-tell dictionary of these reflexes, borrowed from the community's anti-slop catalog and reconciled to its own doctrine: the indigo-to-violet gradient on a brand that is not purple, the beige-and-brass "premium consumer" reflex applied to a brand that never asked for it, div-built fake screenshots, hand-rolled SVG icons at mismatched stroke weights, and the clause-dash-clause cadence in copy.
 
-These apply regardless of mode, direction, or project.
+**The mechanism.** The scoring rubric caps any page at 79 the moment a named cheap tell appears, unless the art direction deliberately chose it.
 
-### Authenticity Over Aesthetics
+**Apply it.** Keep your own cheap-tell list and make it a hard cap in review, not a suggestion.
 
-The site should reflect what the product actually does.
+## 7. You would have let a five-round craft pass ship unreadable text
 
-| Instead of... | Do this... |
-|---------------|------------|
-| "AI-powered insights" | Show a screenshot of actual insights |
-| "Seamless integration" | Show the actual integration workflow |
-| "Trusted by thousands" | Show a specific number or a real logo |
+**The rule.** Contrast is a conversion bug, and screenshot thumbnails hide it. Check text-on-photo and text-on-dark at full size and with a contrast tool, not by eye.
 
-If you can't show it working, question whether it's ready to market.
+**The incident.** August 2026: a site came out of a rubric-clear, five-round visual loop with navy eyebrow labels at 1.48:1 on a dark footer, sitewide, plus brass headline tails over a gold sky. The scorer had read white-on-pale as solid at compressed screenshot size. The visual loop caught the composition and missed the legibility, because both are "looking" and only one of them is measuring.
 
-### Visual Hierarchy Through Restraint
+**The mechanism.** The launch review runs a contrast pass on rendered text over imagery and dark sections as a separate check with numbers, not as part of the aesthetic score.
 
-Hierarchy comes from contrast — in size, weight, color, and space. The fewer tools you use, the more powerful each one becomes.
+**Apply it.** Add one automated contrast check over the final screenshots. A visitor cannot act on copy they cannot read.
 
-- **Color**: Start monochrome. Add color only where it serves a function. One accent color is usually enough.
-- **Typography**: Weight variation creates hierarchy more effectively than size jumps. Two font families max.
-- **Space**: Generous whitespace directs attention. Cramped layouts signal "we couldn't decide what matters."
+## 8. You would have judged the first screen without a comparator
 
-### Processing Fluency
+**The rule.** Every number in the first screen has a comparator, and the comparator must actually be ahead. "Missing from most of the map" needs a two-thirds margin or it is a lie.
 
-Users form a stable first impression within 50 milliseconds. That's not enough time to read — the brain judges purely on visual structure.
+**The incident.** September 2026: a report to a stranger led with "missing from most of the map" directly above a table showing the business appeared in thirteen of the same searches as its competitor. The sentence was a template reflex; the data under it contradicted it. The same batch (next rule) taught the larger lesson, but this one is cheap to state: a stranger reads the first number, then the number next to it, and decides which of you is lying.
 
-**Processing fluency** is the ease with which the brain encodes what it sees. When an interface is easy to process, users perceive it as more truthful, reliable, and valuable.
+**The mechanism.** The report composer may only assert "ahead" or "behind" when the measured margin clears a stated threshold; otherwise the sentence is not generated.
 
-The sweet spot: **high pixel complexity within low object complexity.** Rich, expensive-looking visuals inside simple, structured layouts. A stunning hero image inside a clean grid. This signals "premium" — expensive to make but easy to understand.
+**Apply it.** For every stat you render, write down what it is being compared to and by how much. If you cannot, render the stat without the adjective.
 
-The moment spacing, color, or type treatment becomes inconsistent, the brain shifts from passive consumption to active analysis. That shift breaks fluency, and the sense of quality evaporates.
+## 9. You would have told a working business its homepage was down
 
-### Section Variety is Non-Negotiable
+**The rule.** A read that failed is not a read that found nothing. Reachability is three-way: reached, reached with a real error, not read at all. Only the second earns a recommendation.
 
-AI defaults to repeating the same card grid endlessly. This reads as templated.
+**The incident.** September 2026: a site scanner had a 750 KB response ceiling and threw on overflow. A throw produced status zero, which the grader read as a dead homepage. Eight of nineteen queued reports told working roofers and builders to "restore a normal HTTP 200 homepage before spending on traffic," scored their sites 0/100 at exactly 23% coverage, and showed a blank identity image. Re-probed with the fix, the same sites scored 78 to 99. Worse: the "measured" flag that the report composer consulted before citing a finding was set by the mere presence of a grade object, so the guard meant to stop an unmeasured claim reaching a stranger was itself lying. Only an unticked human-review box kept the batch from sending.
 
-**The rule**: No two consecutive sections can use the same layout pattern. Vary these between sections:
-- Column count and symmetry
-- Background treatment (light/dark/image/gradient)
-- Content density (sparse hero vs. dense feature grid)
-- Alignment (centered vs. left-aligned vs. alternating)
-- Scale (oversized type vs. compact cards)
+**The mechanism.** The scanner truncates at 3 MB instead of throwing (a partial read is a real read). The grader carries a read state. The intelligence layer emits NOT_OBSERVED for an unread page and refuses to recommend on it. Seven regression tests hold the line.
 
-### Progressive Disclosure
+**Apply it.** Anywhere you grade someone else's site, separate "we could not read it" from "it is broken" in the data model, and never let a recommendation flow from the first.
 
-Layer information by commitment level:
+## 10. You would have shipped the funnel without walking it cold on a phone
 
-1. **Glance** (2 seconds): What is this?
-2. **Scan** (10 seconds): What can I do?
-3. **Study** (1 minute): How does it work?
-4. **Deep dive** (5+ minutes): Implementation specifics
+**The rule.** Before launch, walk the money path as a stranger, on a phone, from the entry a stranger would use. A form that POSTs green is not a working funnel if the person in front of it sees something broken.
 
-Every page should satisfy the first two levels. The rest is progressive.
+**The incident.** July 2026: a contractor's slot picker surfaced a raw internal error ("Booking page not found") at the "pick a date" step because the booking page had not been provisioned yet. The lead still posted, so the live-fire check stayed green. A cold buyer at the conversion moment saw what looked like a broken site. The same month, a gym's form label read "Live <scheduler-name> slots", with the internal scheduling system's name in it, a word a customer should never meet. And review sections that looked honest sat three sections away from the form, doing nothing for the anxiety at the moment of action.
 
-### Accessibility is a Design Decision
+**The mechanism.** The launch review includes a scripted cold walk at phone width, a check that every meaningful call to action has verified proof in the same viewport, and a grep for internal system names and TODO text in rendered copy. The funnel degrades to a plain "we'll text you" when a dependency is missing, rather than rendering the dependency's error.
 
-Not a compliance checkbox. Think about these *during* design:
+**Apply it.** Open the site on a phone you do not normally use, arrive from a link, and try to buy. Time it. Write down every hesitation.
 
-- **Contrast**: 4.5:1 for body text, 3:1 for large text (WCAG AA)
-- **Focus states**: Every interactive element needs a visible focus indicator
-- **Keyboard navigation**: Tab reaches everything, modals trap focus
-- **Motion sensitivity**: Wrap decorative animations in `prefers-reduced-motion`
-- **Touch targets**: 44x44px minimum on mobile
+## 11. You would have made the motion invisible
+
+**The rule.** Base markup is the final frame. Animate transform and opacity only. One signature moment per site, a budget of four to six techniques, and every non-essential animation opt-in behind reduced-motion.
+
+**The incident.** August 2026: a site's reveal system used a global early failsafe that resolved every below-fold element before the reader arrived, so the entire motion system was silently disabled and nobody noticed because the page looked finished (that is what base-as-final-frame is for, and it also hid the bug). The fix was an intersection observer driving reveals, a throttled scroll backstop for anything visible-but-unresolved, and a rule to verify by count: `[data-reveal]` total versus resolved after a scripted scroll.
+
+**The mechanism.** The motion doctrine sets the budget, the property whitelist, a two-element cap on backdrop filters, and the count check in the launch review.
+
+**Apply it.** After your motion lands, count the elements that should have animated and the ones that did. If they differ, your motion is decorative to you and absent to the reader.
+
+## 12. You would have forced the wrong spine on the wrong business
+
+**The rule.** The section order that sells a high-ticket contractor (proof, trust, estimate form) is wrong for a restaurant (desire, immediate visit intent, then the event ask) and wrong for a platform whose honest first path is education then login. One spine per vertical, chosen before layout.
+
+**The incident.** Restaurant pages judged against the contractor spine felt like software. A launch gate that asserted a universal estimate form pressured an owner-operations product toward a customer journey it did not have and marked a truthful page as failing. In the other direction, a service-by-city matrix that looked like an SEO shortcut produced doorway pages with city-swapped copy and no local proof.
+
+**The mechanism.** The design standard keeps a spine per vertical and the gate reads which one applies. City pages are added one at a time, after the owner confirms service there and a canonical page is already perfect.
+
+**Apply it.** Name the vertical and its spine at the top of the page component before you write a section.
+
+## 13. You would have designed the owner's dashboard like a landing page
+
+**The rule.** A screen for a working person is the opposite of a marketing page: dense, scannable, comparative, and it never makes the operator hold state in their head. Decide the screen's one primary question before opening a layout file.
+
+**The incident.** August 2026, an observed session: the founder walking a non-technical first-time user through a client's admin screen, describing his own build. The user's complaint reproduced the founder's own, unprompted: "too much information, not as useful, hard to organize." The screen had no primary question, so it was being used that day to share a document with someone, which is what a console without a purpose gets repurposed for. The factory's standing complaint about generated consoles is one sentence: "confusing, hard to see, too much white space, information spread all over the place, nothingness speak."
+
+**The mechanism.** An admin doctrine that starts with a screen contract in a comment at the top of the component (the primary question, the decision the operator makes, what they must never have to remember) and a first-five-seconds beat borrowed from game onboarding: load it, look for five seconds, no scrolling, say what it is for.
+
+**Apply it.** Run `skills/clarity-gate` on the screen as the person who has to use it, not as the person who built it.
 
 ---
 
-## Anti-Patterns
+## What survived from the framework
 
-### Visual (Marketing)
-- Purple/blue gradients as default "tech" aesthetic
-- Stock photos of people pointing at screens
-- Floating geometric shapes with no meaning
-- "AI brain" or circuit board imagery
-- Same 3-column card grid for every section
-- Pure grayscale neutrals with no brand tint
+The three-layer model still holds and is worth stating once: principles that teach how to think (this file), a system that turns a brand into a wired project (tokens, components, scaffolding), and instances (each site). If two instances built from the same system look the same, the principles failed. Before layout, name a conceptual tension specific to the business, declare a mode (a marketing page shows and does not sell; a dashboard is precise and alive), and pick one signature detail per project that no other client gets. Section variety is non-negotiable: no two adjacent sections share a structure, every section has one pause, and one or two intentional grid breaks per page. All of that was true before the scars. The scars are why it is enforced.
 
-### Visual (Dashboards)
-- Light mode by default on a premium data product
-- Static components with no hover states
-- Flat cards with no depth or elevation
-- Backdrop-blur on every element
-- If it looks like a default component library demo, it has failed
+## The gate, in order
 
-### Content (Both)
-- "Revolutionizing [industry]"
-- "AI-powered" without explaining what the AI does
-- Testimonials that sound like marketing wrote them
-- "Coming soon" for anything above the fold
+1. Reference autopsy before composing (rule 2).
+2. Token values audited, photos graded (rules 5, 3).
+3. Compose, shoot, score against the rubric and the references, three to five rounds (rules 1, 6).
+4. Contrast pass with numbers (rule 7).
+5. Cold walk on a phone, proof near the ask, no internal words in copy (rule 10).
+6. Motion count check, reduced-motion respected (rule 11).
+7. Clarity gate as the reader (rules 8, 13), and `skills/definition-of-done` for the claim you make when you say it shipped.
 
 ---
 
-## The Reference Protocol
+Provenance: ported from a private site factory's design doctrines, lessons ledger, and incident notes on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Instead of hardcoding one aesthetic, study references and extract *principles*.
-
-### How to Study a Reference
-
-When you encounter something that looks premium, analyze through six lenses:
-
-1. **Depth model**: How is elevation communicated? Shadows, borders, blur, transparency?
-2. **Color budget**: Count actual colors used. Where does the accent appear — and where doesn't it?
-3. **Motion vocabulary**: What moves, and on what trigger? What *doesn't* move?
-4. **Type strategy**: How many fonts? What creates hierarchy — size, weight, color, or spacing?
-5. **Density and rhythm**: How much whitespace? Does density vary between sections?
-6. **Signature detail**: What's the one thing that makes this unmistakably *this* design?
-
-### Extract vs. Invent
-
-**Extract** (transferable across projects):
-- Spacing rhythm and density approach
-- How hierarchy is achieved
-- Motion trigger patterns
-- How sections create variety
-
-**Invent fresh every time:**
-- The specific color palette
-- The specific font pairing
-- The signature detail
-- The conceptual metaphor
-
-The most important reference folder is **non-web**. Architecture, film stills, industrial design. Referencing other websites leads to copying. Referencing across mediums leads to *translation* — which is where originality comes from.
-
----
-
-## The Uniqueness Formula
-
-The gap between "polished" and "memorable."
-
-### Intentional Grid Breaks (1-2 Per Page)
-
-Break the grid deliberately where the break reinforces the concept:
-- An oversized number bleeding out of its container
-- A card rotated 2-3 degrees
-- A full-bleed image interrupting a padded layout
-
-More than 2 breaks reads as broken. The breaks should feel like confidence, not carelessness.
-
-### One Pause Moment Per Section
-
-Each major section should have one element that makes someone stop scrolling — not in confusion, but in appreciation. Small details that signal craft: unexpected material choices, unexpected scale, unexpected timing.
-
-These accumulate. Individually subtle. Together, they create "this was made by someone who cares."
-
-### Signature Detail (One Per Project)
-
-Every premium interface has one detail that makes it unmistakably custom. It should directly relate to your concept — a natural extension of the metaphor.
-
-Don't reuse signature details across projects. The whole point is specificity.
-
----
-
-## The Design System Kickoff
-
-Before writing any code, produce a project-specific design system. This is the bridge between thinking and building.
-
-### Kickoff Checklist
-
-- [ ] **Concept statement**: One sentence naming the tension/metaphor
-- [ ] **Mode declaration**: Marketing or Dashboard
-- [ ] **Identity direction**: Named, blended, or custom
-- [ ] **Reference study**: 2-3 references analyzed through the 6 lenses
-- [ ] **Color palette**: 6-8 colors derived from concept, contrast ratios verified
-- [ ] **Type selection**: 1-2 fonts with scale ratio and weight definitions
-- [ ] **Spacing scale**: Base unit (usually 8px) with full scale defined
-- [ ] **Depth model**: Flat, soft, dimensional, or glass — 3-5 elevation levels
-- [ ] **Border radius**: Pick a personality (sharp, professional, friendly, playful)
-- [ ] **Motion vocabulary**: 4-6 techniques matched to concept energy
-- [ ] **Signature detail**: One custom element tied to concept
-- [ ] **Accessibility notes**: Focus styles, reduced-motion strategy, contrast check
-
-### Design System File
-
-The output of the kickoff should be a single markdown file that becomes the implementation's source of truth:
-
-```markdown
-# [Project Name] Design System
-
-## Concept
-[One-sentence tension/metaphor]
-[Mode: Marketing or Dashboard]
-[Identity direction]
-
-## Color Tokens
-[Named tokens with values, organized by role: backgrounds, text, accents, borders, states]
-
-## Typography
-[Font families, scale ratio, weights, line heights, letter spacing]
-
-## Spacing
-[Base unit, full scale, role assignments]
-
-## Depth & Elevation
-[Model choice, levels with specific values]
-
-## Border Radius
-[Token names and values]
-
-## Motion
-[Selected vocabulary, easing curves, duration scale]
-
-## Signature Detail
-[The one custom element]
-```
-
-Every component built should reference these tokens, not invent its own values.
-
----
-
-## Color: Key Principles
-
-- Derive colors from mood, not from a color picker. Find 2-3 reference images that capture the *feeling*, extract colors from those.
-- Backgrounds handle 70-80% of what the user sees. Pick these most carefully.
-- Dark themes need 3-4 layers of background depth. A single flat dark color feels cheap.
-- Your accent color should feel *earned* — it appears only where action or attention is needed. If accent is on more than 10% of visible screen, it's lost its power.
-- **Saturated neutrals**: Pure grays look disconnected. Tint all neutrals with a trace of the brand hue (< 5% saturation). This creates environmental cohesion — subtle but felt.
-- **Temperature consistency**: Every neutral must share the same temperature. Mixing warm and cool neutrals reads as cheap.
-
----
-
-## Typography: Key Principles
-
-- Pick a primary font that matches your concept's personality: geometric sans = precision, humanist sans = warmth, serif = authority, mono = technical
-- If pairing two fonts, create productive tension — contrast of construction (geometric + humanist, sans + serif)
-- Use a mathematical ratio for your type scale: 1.25 for dense dashboards, 1.333 for clean SaaS, 1.5 for marketing, 1.618 for luxury
-- 3 weights is usually enough: regular (body), medium (emphasis), bold (headlines)
-- Use fluid `clamp()` scaling, not fixed breakpoints
-- Generous line height (1.5-1.7 for body) is one of the simplest signals of quality
-
----
-
-## Motion: Key Principles
-
-Motion is where most AI-generated sites fail. They either have none (feels dead) or use the same fade-up on everything (feels automated).
-
-**Every animation should answer one of these questions:**
-- "Where did this come from?"
-- "What just happened?"
-- "What should I look at?"
-- "Is this alive?"
-
-If an animation doesn't answer any of these, remove it.
-
-**Build a motion vocabulary for each project.** Choose 4-6 techniques and use them consistently. The ones you *don't* pick matter as much as the ones you do.
-
-**Stagger is the cheapest upgrade.** When multiple elements enter together, stagger their entrance by 50-100ms each. This single technique makes any group feel crafted instead of dumped on screen.
-
-**Easing matters more than duration.** Default CSS easing feels generic. Derive custom cubic-bezier values that match the concept's energy — luxury sites need slow deceleration, developer tools can be snappy.
-
----
-
-## Content That Earns Trust
-
-### Copy Principles
-- Show, don't sell
-- Use technical terms when accurate
-- Avoid superlatives (revolutionary, game-changing, cutting-edge)
-- Be specific about capabilities *and* limitations
-- State what your product doesn't do — it builds more trust than another feature bullet
-- Match voice to identity direction (Luxury Dark = confident restraint, Brutalist = blunt, Editorial = conversational authority)
-
-### Headline Formulas
-- **The Specific Claim**: "Analyze 10M rows in under 3 seconds."
-- **The Tension**: "Enterprise security without the enterprise complexity."
-- **The Perspective Shift**: "You don't have a data problem. You have a question problem."
-- **The Quiet Confidence**: "It just works." (Only if it genuinely does.)
-- **The Anti-Headline**: Skip the headline. Lead with a screenshot or demo.
-
-Avoid: questions as headlines, imperatives that assume desire, anything that could describe any product in any industry.
-
----
-
-## Self-Review (Before Shipping)
-
-After building, before shipping, run these checks:
-
-1. **Objective Fidelity**: Can you articulate the core purpose of each screen without aesthetic descriptors? Does every element serve that purpose?
-2. **The "Beige" Test**: Squint until text is unreadable. Does the page have a narrative arc — varying visual intensity? Or is it a flat sequence of similar sections?
-3. **Template Detection**: If you swapped the logo and brand color, would the design still feel generic?
-4. **Processing Fluency**: Does every label decode in a split second? Any clever wordplay or jargon where a boring label would be better?
-5. **Robustness**: Rapid-click every interactive element. Resize during animations. Open and immediately close modals. Anything shift or glitch?
-6. **Responsive Stress**: View at 375px. Does anything overflow or become unusable?
-7. **Keyboard Navigation**: Tab through the entire site. Can you reach everything? Can you see where focus is?
-
----
-
-## Learn More
-
-**Free Resources:**
-- [AI Builders Lab](https://www.skool.com/ai-builders-lab-6883) - Community for AI-assisted builders
-- [AI-First Fundamentals](https://traviseric.com/courses/ai-first-fundamentals) - 37 lessons on engineering principles
-- [README](../README.md) - Repo entry point
-
-**Go Deeper:**
-- [Complete AI Development System](https://traviseric.com/products/ai-development-system) — Full framework + enhanced agent
-- [AI Orchestra Method](https://traviseric.com/courses/ai-orchestra-method) — Scale to many parallel agent instances
-- [Travis Eric — Consulting](https://traviseric.com) — For teams adopting AI-first development
-
-**Community:**
-- [AI Builders Lab on Skool](https://www.skool.com/ai-builders-lab-6883) - Share builds, get feedback, learn patterns
+Next: `skills/definition-of-done/SKILL.md`.
