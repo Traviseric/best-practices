@@ -1,281 +1,159 @@
 # Engineering Principles for AI Projects
 
-A sequential framework for evaluating and hardening any project that AI agents work on. Work through each gate in order — each builds on the last.
+Fourteen rules, each stated as the thing an agent would have done wrong, each with the failure that earned it and the mechanism that now stops it. None of them is advice. Every one was paid for, in one private portfolio of production systems run mostly by agents, between mid-2025 and September 2026. Dates are by month. Names are removed. The mechanisms are real and most of them ship in this repository.
+
+If you only read one thing: rule 3 and rule 6 together explain why this document is not a checklist. The checklist existed. It was scheduled for the following Monday.
 
 ---
 
-## The Idea
+## 1. You would have written the intelligence in code
 
-Most developers ask one question: "does my code work?" That's not enough when agents are building autonomously. You need to know whether the project is *structured* for agents, whether the *workflow* produces reliable output, whether it's *safe to deploy*, and whether it *earns trust*.
+**The rule.** Intelligence lives in markdown context documents; reasoning lives in the model; code is plumbing (persistence, automation, integration, scale).
 
-These are different questions answered by different evaluations. Running them in sequence — each gate building on the last — is the difference between a project that sort-of works and one that's production-hardened.
+**The incident.** A 5,000-line analysis module with custom NLP, scoring, and pattern matchers was replaced by about 500 lines of structured markdown that told the model how to do the analysis. Same output. The module had taken weeks and reimplemented what the model already does when given the right document.
 
----
+**The mechanism.** Before any build, one question in writing: "If I gave the model a well-written document explaining exactly what I want analyzed and how, would it produce the same result as this code?" If yes, the deliverable is the document.
 
-## The Gates
+**Apply it.** Put that question at the top of your project's spec template.
 
-```
-Gate 0: LLM-NATIVE CHECK      Should I even write code?
-Gate 1: FOUNDATION             Is the project structured right?
-Gate 2: DEVELOPMENT            Are we building right?
-Gate 3: PRODUCTION READY       Is it safe to run?
-Gate 4: ENGINEERING AUDIT      Does it pass inspection?
-Gate 5: ENTERPRISE POLISH      Will serious users trust it?
-Gate 6: EXECUTION PLAN         What's the roadmap to get there?
-```
+## 2. You would have called a green board a measurement
 
-Pick the gate that matches your concern, or start at Gate 0 and ride all the way through.
+**The rule.** "We did not measure this" is never a negative finding. A board that cannot say "unmeasured" will eventually say "false" instead.
 
----
+**The incident.** August 2026: a capability matrix reported that all 22 client sites "break first at owner login". Every word was defensible and the conclusion was false. Of the 22, one had an observed, attributable failure; one was ambiguous; twenty-one had never been walked at all; eight had passed. Days went into a fleet-wide outage that had never existed, because three states had been collapsed into the word "breaks".
 
-## Gate 0: Should I Even Write Code?
+**The mechanism.** A determinacy contract: every board cell carries a confidence state (observed / assumed / never checked) orthogonal to the completeness ladder, checked by a script with a baseline that may only shrink.
 
-**This is the most expensive mistake in AI development** — building Python modules that reimplement what an LLM does natively when given the right context document.
+**Apply it.** Add a column to any status table you keep: how do we know. If the answer is "nobody ran it", write that, not zero.
 
-Before starting any gate, run this check:
+## 3. You would have applied the migration before the code landed
 
-1. **Am I building intelligence or plumbing?** If the core value is "understand text and give smart advice," you probably need a context document, not code.
-2. **Would `.md` files + Claude do this?** If yes, write the context documents first. Code is for persistence, automation, integration, scale, and distribution.
-3. **Am I reimplementing LLM capabilities in Python?** Pattern matching, classification, summarization, analysis — these are things the model already does. Write the context that tells it *how* to do it for your domain.
+**The rule.** A schema tightening and the code that satisfies it ship in one commit, code first, deployed before the policy is applied. A tightening you cannot land and apply together is a two-phase change: permissive policy, deploy the writer, then tighten.
 
-**The rule:** Intelligence lives in `.md` context documents. Reasoning lives in the LLM. Code is plumbing.
+**The incident.** September 2026: a row-level-security migration locked a memory table to the service role. It was applied to the production database from a worktree whose code had not landed; the deployed app still wrote with the anonymous key. Every turn of a client's AI receptionist returned HTTP 500 for hours. The founder found it by calling his own business line.
 
-**Real example:** A 5,000-line Python relationship analysis module — with custom NLP, scoring algorithms, pattern matchers — was replaced by 500 lines of structured markdown that told Claude how to analyze relationships. Same quality output. 90% less code to maintain. The markdown was also easier to improve.
+**The mechanism.** The order is written into the operating rules; the writer change lands, deploys, and only then does the policy apply. A hand-applied migration with the fix left uncommitted is treated as an incident, not a shortcut.
 
-Ask yourself: "If I gave Claude a well-written document explaining exactly what I want analyzed and how, would it produce the same result as this code?" If yes, write the document.
+**Apply it.** Any migration that removes a permission is reviewed as a two-sided change: name the writer that satisfies it and the deploy that carries the writer.
 
----
+## 4. You would have called a weekly check "monitoring"
 
-## Gate 1: Foundation — Is the Project Structured Right?
+**The rule.** A health contract that runs weekly is not monitoring. The check that would catch a break in sixty seconds has to run at the cadence of the break.
 
-**What it proves:** An agent dropped into this repo can orient itself in under 30 seconds, find any concept via lookup table, and start productive work without asking questions.
+**The incident.** Same outage as rule 3. The text-plane health check existed, reproduced the failure in sixty seconds when run by hand, and was scheduled for Mondays at 09:30. The break happened on a Tuesday night.
 
-**Key checks:**
-- CLAUDE.md exists, is under 100 lines, has a lookup table mapping concepts to files and search terms
-- Feature-based directory structure (not layer-based)
-- Consistent naming across files, functions, routes
-- `docs/` directory with an index — no orphaned docs in root
-- `.claudeignore` excludes noise (PDFs, binaries, node_modules, build artifacts)
-- `specs/` directory for feature specifications
-- No dead files or mystery directories
+**The mechanism.** Health contracts declare a cadence, and a contract whose cadence is longer than the acceptable outage is listed as coverage, not monitoring. See `skills/definition-of-done` for the rung this guards: WORKS is "and I would know within a day if it stopped".
 
-**The test:** Can an agent reading only CLAUDE.md find any concept in the project?
+**Apply it.** For each health check, write the longest outage it can miss. If that number is longer than you would tolerate, it is not monitoring yet.
 
-**Why feature-based structure matters:**
-```
-# Bad (layer-based) — agent has to search everywhere
-src/
-  controllers/
-  models/
-  services/
-  routes/
+## 5. You would have trusted your new gate's first alarm
 
-# Good (feature-based) — agent finds everything about auth in one place
-src/
-  auth/       # login, signup, JWT, middleware
-  billing/    # plans, checkout, invoices
-  dashboard/  # widgets, layouts, data
-```
+**The rule.** A gate has two failure modes and authors test only one. A new checker is not trusted until it has been shown to fire on the historical defect it was written for and to stay silent on output already known to be good. When your own new gate fires for the first time, verify the alarm before reporting it.
 
----
+**The incident.** August 2026: four gates written in one week for an outreach pipeline, every one wrong on its first live run, none in the direction its author was watching. A vocabulary rule flagged "PageSpeed" inside the public name of a public tool. A severity rule flagged a draft for omitting a finding the producer had considered, rejected, and recorded rejecting. A coverage rule reported 3,201 businesses missing because it read the wrong file. Three of four were false alarms about work that had been done. Reported as findings, they would have burned the gate's credibility on day one.
 
-## Gate 2: Development — Are We Building Right?
+**The mechanism.** Gate authoring in both directions is a written rule; a new detector ships in shadow and is promoted to enforcing by a ratchet script only after it has fired correctly and stayed silent correctly.
 
-**What it proves:** The development workflow produces reliable, reviewable code. Agents build autonomously using a structured cycle. Back pressure rejects bad output before humans look.
+**Apply it.** Keep one known-bad and one known-good fixture per gate. A gate without both is a draft.
 
-**Key checks:**
-- Tests exist and run green (TDD — tests written first, not after)
-- Back pressure rejects bad output through types, linters, and CI — not just advisory warnings
-- Development follows Research -> Plan -> Implement (separate contexts for each)
-- No behavior drift between docs, tests, and runtime
-- Tasks are delegating ("add notification capability") not prescriptive ("create POST endpoint with these exact fields")
-- Specs committed alongside implementation
-- CLI preferred over MCP where possible (lower token overhead)
+## 6. You would have written the rule in prose
 
-**The workflow that works:**
+**The rule.** Hooks are the highest-compliance documentation channel that exists. A rule in prose costs context in every session forever and is skimmed; a rule in a guard costs nothing until violated, then teaches once, at the exact moment it matters, with the remedy attached.
 
-```
-Context 1: RESEARCH
-  - Read existing code, understand patterns
-  - Identify what needs to change
-  - Output: findings document
+**The incident.** Rules about worktree placement, secrets, and conflict markers lived in a long operating document for months and were violated regularly. Each became a pre-commit guard in one afternoon. Observed repeatedly afterward: an agent that would rationalize past the prose complied instantly with a well-written denial, and generalized the lesson within the session, using the sanctioned form everywhere unprompted.
 
-Context 2: PLAN
-  - Design the approach based on research
-  - Write the spec
-  - Output: committed spec in specs/
+**The mechanism.** The guards in `hooks/` (staged-secrets, conflict-markers, the build gate) and `docs/HOOKS.md`. Every surviving guard shares five traits, and each is a survival adaptation: fail open; staged or new content only; ratchet, not wall; the denial teaches; escape hatches exist and leave a trace.
 
-Context 3: IMPLEMENT
-  - Write failing tests first
-  - Implement until tests pass
-  - Output: working code + passing tests
-```
+**Apply it.** Take the rule you repeat most often and write its denial message first. Then write the guard that emits it.
 
-Each context is fresh. One task per context, 5-15 minutes of focused work. This prevents context degradation and keeps agent output quality high.
+## 7. You would have scoped the guard to the whole tree
 
-**Back pressure is the key insight:** When tests fail, they should *block the build*, not just warn. When types don't match, compilation should *fail*. The more your toolchain automatically rejects bad agent output, the less you need to review manually. This is the difference between "AI-assisted development" and "autonomous development."
+**The rule.** A guard reads only the staged index or the new content. A mis-scoped guard propagates backpressure across every session at the speed of the commit rate.
 
----
+**The incident.** August 2026: an authority-check guard scanned the whole tree instead of staged lines. A report that quoted the guard's own detector patterns was committed, and within the hour the guard was blocking other sessions' unrelated commits until a concurrent session patched in an exemption. Scope is not a nicety; it is the difference between a guard and an outage.
 
-## Gate 3: Production Readiness — Is It Safe to Run?
+**The mechanism.** `hooks/guard-staged-secrets.sh` reads `git diff --cached` and nothing else. Two gate hooks written in July 2026 were reverted the same day for the opposite reason: they blocked too much and the founder chose speed. What survived by August was not fewer rules but better-scoped ones.
 
-**What it proves:** The project won't lose data, leak secrets, crash silently, or fail without telling anyone.
+**Apply it.** In any hook, print what it scanned. If the list is longer than what you staged, it is wrong.
 
-**The layers (bottom-up):**
+## 8. You would have invented a reason to ask the human
 
-| Layer | Question |
-|-------|----------|
-| Security & Secrets | Are secrets managed properly? No plaintext keys? |
-| Error Handling | Are errors classified and retried intelligently? |
-| Observability | Is there structured logging and an audit trail? |
-| Human-in-the-Loop | Is there an escalation path for high-risk actions? |
-| State & Persistence | Can state survive a crash? |
-| Configuration | Is there clear config precedence (env > file > default)? |
-| Operational Controls | Does a kill switch or graceful shutdown exist? |
-| Infrastructure | Is the deployment environment hardened? |
-| Workflow & Testing | Do tests pass? Does CI run? |
+**The rule.** A restriction is a claim about authority, and an unverified claim about authority is treated exactly like an unverified claim about revenue: denied without a citation.
 
-**Exit criteria:**
-- No plaintext secrets in code or config files
-- Errors are classified and handled (not just caught and logged)
-- Structured logging exists
-- State survives a crash (checkpoints, event log, or database)
-- Config has clear precedence
-- Kill switch or graceful shutdown exists
-- Tests pass, CI runs
+**The incident.** The system's most persistent failure mode was never agents doing too much. It was agents inventing caution: guessing that something needed approval, writing the guess into a document, and manufacturing human workload. A sweep found 165 "gates" that supposedly required the founder; 28 were real.
 
----
+**The mechanism.** A pre-commit guard rejects newly staged human-only restrictions that do not carry an adjacent marker citing an actual decision. Watching an agent hit it is instructive: it does not delete the restriction, it goes and finds out whether the authority exists, and the document ends up correctly cited or correctly delegated.
 
-## Gate 4: Engineering Audit — Does It Pass Inspection?
+**Apply it.** When you write "requires approval", write who decided that and when, next to it. If you cannot, delete the line.
 
-**What it proves:** The project meets a formal production engineering standard — not "does it work" but "does it meet standards."
+## 9. You would have amended, stashed, or "recovered" in place
 
-**How to run it:**
-1. Pick or build a 12-category audit checklist covering: security, error handling, logging, testing, deployment, monitoring, documentation, data integrity, performance, accessibility, dependency management, and operational procedures
-2. Auto-detect the stack (serverless, container, static, CLI)
-3. Run all categories in one uninterrupted pass
-4. Score each category: Pass / Partial / Fail / Not Applicable
-5. Generate a prioritized remediation roadmap
+**The rule.** Never amend in a shared repository; add a follow-up commit. Never stash or rebase in place when other sessions share the checkout. Write the reflog down before any recovery. If another session already holds the lane, stand off and report.
 
-**Exit criteria:**
-- Audit report generated
-- No "Fail" items in security, data integrity, or error handling
-- Remediation roadmap exists for any Partial items
-- Stack-specific concerns reviewed
+**The incident.** July 2026: a session amended a commit that was not its own and cost a reflog archaeology session to unwind. August 2026: a "recovery" nobody wrote down first silently reverted 67 lines of a concurrent session's work. September 2026: a stalled `pull --rebase --autostash` had neither `rebase-merge` nor `rebase-apply` present, so a session misread the state, ran `git add -A`, and committed raw conflict markers and an invalid `package.json`; scheduled tasks then kept committing on the detached HEAD of that stalled rebase for hours.
 
-The audit should be project-specific. Don't force irrelevant rules. A CLI tool doesn't need RBAC. A static site doesn't need database migration procedures. `Not Applicable` is a valid answer — but it must be explained.
+**The mechanism.** `hooks/guard-conflict-markers` denies the commit with markers in it. Landing happens from a worktree branched off the remote trunk, by cherry-pick, with explicit paths. `skills/session-closeout` encodes the stand-off rule and the explicit-path commit.
+
+**Apply it.** Before any git operation you would call a fix, run `git reflog` and paste the top five lines into your notes. Then act.
+
+## 10. You would have let the glue mangle the payload
+
+**The rule.** Write files with the file tool, not with heredocs or multi-line shell strings, and never regenerate, re-sort, or round-trip a registry file to change part of it.
+
+**The incident.** A heredoc collapsed the `\b` in a Windows path into a backspace character inside a registry row (it happened again the day this document was written). A 4-line semantic change once produced a 1,371-line diff. A sort of a 328-entry gate registry caused a merge conflict that had nothing to do with the change. In a repository where several agents hold concurrent worktrees, gratuitous reformatting is other people's merge conflicts.
+
+**The mechanism.** The operating rules name which instruction wins when a harness tells the agent to prefer shell tools: for multi-line payloads, paths, regexes, JSON, the file tool wins. `git diff --stat` larger than the intended change is treated as the bug.
+
+**Apply it.** If your diff stat surprises you, revert and redo with targeted edits before committing.
+
+## 11. You would have committed the password inside the PDF
+
+**The rule.** Secrets never enter git, and that includes documents: PDFs, DOCX, screenshots, fixtures, pasted transcripts. A leaked secret is not fixed by a follow-up commit; it is in history and must be rotated.
+
+**The incident.** July 2026: a tracked PDF was found carrying plaintext passwords. Another session found an unauthenticated admin route serving strategy content. August 2026: a service key reported as "configured" in a hosting console was an empty string; the code's own length guard failed silently into a log nobody read, and a live test was lost to it.
+
+**The mechanism.** `hooks/guard-staged-secrets` denies a commit whose staged files carry a provider-prefixed live credential. It reads only the index and it cannot read binary documents, so the PDF case is still on the human. Values are read, not names: a variable listed in a console is not a configured value until its length is checked.
+
+**Apply it.** Install the guard, and add one line to your review checklist: open any document you are about to commit.
+
+## 12. You would have let a rehearsal prove demand
+
+**The rule.** Synthetic evidence has a ceiling. A rehearsal you control can prove mechanics; it can never prove demand, adoption, revenue, or reality. The two ladders never collapse.
+
+**The incident.** A fitness client's whole intake chain returned a live receipt at every hop, all from the operator's own verification traffic. Months later a session read that as "proven" and made a wrong call about whether the chain was switched off. Nothing was off. It had never carried a stranger.
+
+**The mechanism.** Where it matters most, the rule is in code: a transaction event without an explicit `synthetic: false` marker cannot earn the top rung. `skills/definition-of-done` names the rung (FED) and what it takes.
+
+**Apply it.** Tag every test event as synthetic at the source. Let the dashboard count them separately.
+
+## 13. You would have hand-typed the map and trusted it
+
+**The rule.** Prose may cite truth; it may never store it. If a mirror can be generated from the source of truth, generate it. If it must stay human prose, put a sync check on it.
+
+**The incident.** July 2026: a pipeline stage was present in the runbook, the skill, and the code, and missing from the machine-readable twin, so the status command had never surfaced it to anyone. The map had drifted from the territory in the one place nobody reads.
+
+**The mechanism.** Generated boards for data; a sync-contract script for prose mirrors, run as a test; a lookup table that points at files instead of restating them.
+
+**Apply it.** For every doc that describes a process, name the file it would be wrong about, and write a check that compares them.
+
+## 14. You would have said "verified" about a check you did not run
+
+**The rule.** An HTTP 200 is not content. A live process is not a finished job. Re-reading a file is not running the gate. A short SHA is not a SHA. A configured variable name is not a configured value. A local build is not the CI build. A piped exit code is not the command's exit code.
+
+**The incident.** Each of the seven has produced a false "done" in one portfolio. The full account is in `docs/SEVEN_CHEAP_LIES.md`.
+
+**The mechanism.** `skills/definition-of-done` will not let a completion claim leave without its rung and its proof. The honest answer ("I could not check") is always cheaper than the retraction.
+
+**Apply it.** Read the seven before you next type the word "verified".
 
 ---
 
-## Gate 5: Enterprise Polish — Will Serious Users Trust It?
+## Running this on your project
 
-**What it proves:** The project isn't just functional — it's credible. This is the layer between "works" and "wins."
+- **Quick check.** Pick the rule whose incident sounds most like last month. Apply its mechanism this week.
+- **Full ride.** Rules 6, 7, 11 install as hooks in an afternoon (`docs/HOOKS.md`). Rules 2, 4, 5, 12, 13 are one script each. Rules 3, 9, 10 are order-of-operations and live in your `CLAUDE.md`. Rule 1 is a question in your spec template. Rule 14 is a read.
+- **For agents running overnight.** Rules 2, 5, 9, and 14 are the ones that fail without a human in the room. Wire their mechanisms before the first unattended run.
 
-**Prerequisite:** Must pass Gate 3 first. If production gaps exist, go back.
+Provenance: distilled from a private operating system's rules, incident reports, and guard studies on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-**The 8 pillars (in impact-per-dollar order for indie teams):**
-
-```
-1. Developer Experience     SDK, docs, quickstart, error messages
-2. Documentation Portal     Searchable, versioned, example-rich
-3. UX & Analytics           A/B testing, conversion tracking
-4. Audit & Compliance       Logging, data governance
-5. Trust & Social Proof     Testimonials, case studies, status page
-6. Integrations             Webhooks, OAuth, marketplace presence
-7. Load Testing             Benchmarks, capacity planning
-8. Release Ops              Changelog, versioning, migration guides
-```
-
-**Exit criteria:**
-- 8-pillar assessment completed
-- Top 3 gaps identified and prioritized
-- Blocking tasks identified
-
-Most indie projects never think about this layer. That's why most indie projects feel indie. You don't need all 8 — but knowing which ones you're *deliberately skipping* versus which ones you never considered is the difference between strategic and accidental.
-
----
-
-## Gate 6: Execution Plan — What's the Roadmap?
-
-**What it proves:** Findings from Gates 1-5 are captured in an actionable, gated, parallelizable roadmap — not a loose TODO list.
-
-**A valid roadmap answers:**
-1. What is this project trying to become?
-2. What major capabilities exist already?
-3. What major capabilities are next?
-4. What is blocked and why?
-5. What must be proven before the project can advance?
-6. How should parallel agents split the work?
-
-**Exit criteria:**
-- Roadmap exists with phases and clear entry/exit criteria per phase
-- Findings from Gates 1-5 are encoded as roadmap items
-- Blocked items have named blockers (not vague "needs work")
-- Work is parallelizable — agents can pick up independent tracks
-
----
-
-## Running This on Your Project
-
-### Quick Check (pick a gate)
-- "Is this structured right?" -> Gate 1
-- "Are we building well?" -> Gate 2
-- "Is this safe to deploy?" -> Gate 3
-- "Does this meet standards?" -> Gate 4
-- "Will enterprise users trust this?" -> Gate 5
-- "What's the plan?" -> Gate 6
-
-### Full Ride (all gates)
-```
-Start at Gate 0. For each gate:
-1. Evaluate the checks against the target project
-2. Score the exit criteria
-3. Record pass/fail with evidence
-4. Continue to next gate
-
-Output: per-gate results + combined remediation plan.
-```
-
-### For Overnight Agents
-Point an agent at this doc and your project path:
-```
-Read docs/ENGINEERING_PRINCIPLES.md
-Target: my-project at ./
-
-Run Gates 1-6 in order. Evaluate exit criteria.
-Output: engineering-review.md with per-gate results.
-```
-
----
-
-## Key Principles Behind the Gates
-
-These principles inform the gates but are worth internalizing on their own:
-
-- **One context = one task.** Don't ask an agent to do three things. Give it one clear task with one clear output.
-- **Fresh context every time.** Agents don't remember. Each session starts clean. Write handoffs.
-- **Back pressure is blocking, not advisory.** Failed tests reject the build. Types reject bad code. Linters reject bad patterns. Automate rejection.
-- **Delegate judgment, don't prescribe.** "Add notification capability, follow existing patterns" beats "Create POST endpoint with these exact fields."
-- **Specs are source code.** Commit them alongside implementation.
-- **Review research, not code.** Reviewing the spec before implementation is 10x more valuable than reviewing the code after.
-- **Moat is in the workflow, not the model.** Models commoditize. Your defensible value is the pipeline — how tasks get defined, routed, validated, and deployed.
-- **Tokens are cheaper than people.** Spend tokens liberally on evaluation, retries, and back pressure.
-- **A feature today is tech debt tomorrow.** Build for easy deletion. Models improve faster than codebases evolve.
-
----
-
-## Learn More
-
-**Free Resources:**
-- [AI Builders Lab](https://www.skool.com/ai-builders-lab-6883) - Community for AI-first builders
-- [AI-First Fundamentals](https://traviseric.com/courses/ai-first-fundamentals) - 37 lessons on engineering principles
-- [best-practices.md](../best-practices.md) - Operational rules for AI coding agents
-- [Audit Your Project](AUDIT_YOUR_PROJECT.md) - Run an agent against your project
-
-**Go Deeper:**
-- [Complete AI Development System](https://traviseric.com/products/ai-development-system) — Full ruleset + enhanced agent framework
-- [AI Orchestra Method](https://traviseric.com/courses/ai-orchestra-method) — Scale to many parallel agent instances
-- [Travis Eric — Consulting](https://traviseric.com) — For teams adopting AI-first development
-
-**Community:**
-- [AI Builders Lab on Skool](https://www.skool.com/ai-builders-lab-6883) - Share builds, get feedback, learn patterns
+Next: `docs/WEB_DESIGN_PRINCIPLES.md`.
