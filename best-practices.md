@@ -16,6 +16,12 @@ Principles that make AI agents (Claude Code, Codex, Cursor, Aider, etc.) work be
 | [Engineering Principles](docs/ENGINEERING_PRINCIPLES.md) | Core principles for AI-first development |
 | [Patterns](docs/PATTERNS.md) | Fresh context, file-based state, handoffs |
 | [Web Design Principles](docs/WEB_DESIGN_PRINCIPLES.md) | Building sites with AI agents |
+| [Seven Cheap Lies](docs/SEVEN_CHEAP_LIES.md) | How an agent fakes "verified", and the honest alternative |
+| [Room and Ground](docs/ROOM_AND_GROUND.md) | Writing that has to move a person: two documents, never one |
+| [Hooks](docs/HOOKS.md) | Secrets guard, conflict-marker guard, build gate; install and tests |
+| [Insights](docs/INSIGHTS.md) | Turning a `/insights` report into rules, hooks, and skills |
+
+**Skills** (install with the plugin or `install.sh` / `install.ps1`; agents start at [AGENTS.md](AGENTS.md)): `definition-of-done`, `clarity-gate`, `verification-gate`, `session-closeout`, `room-and-ground`. Each lives in `skills/<name>/SKILL.md` and is self-contained.
 
 ---
 

@@ -30,6 +30,8 @@ cd best-practices
 
 Then tell your agent: *"Install the best-practices skills, audit this project, and run the clarity gate on my homepage."*
 
+**If you are the agent:** read [AGENTS.md](AGENTS.md). It is the two-minute setup, written to you.
+
 ---
 
 ## What you get
