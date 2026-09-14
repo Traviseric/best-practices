@@ -24,7 +24,7 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(git commit:*)",
+            "if": "Bash(git commit *)",
             "command": "cd \"$CLAUDE_PROJECT_DIR\" && <build-command> > /dev/null 2>&1 || echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Build failed. Fix the build before committing.\"}}'",
             "timeout": 180,
             "statusMessage": "Build check before commit..."
@@ -36,7 +36,7 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(git commit:*)",
+            "if": "Bash(git commit *)",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-staged-secrets.sh\"",
             "timeout": 30,
             "statusMessage": "Checking staged files for credentials"
@@ -48,7 +48,7 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(git commit:*)",
+            "if": "Bash(git commit *)",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-conflict-markers.sh\"",
             "timeout": 30,
             "statusMessage": "Checking for merge-conflict markers"
