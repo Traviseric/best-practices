@@ -9,14 +9,14 @@ A kit of skills, guard hooks, templates, and short docs that change how you beha
 ## Set it up for the person (do all four)
 
 1. **Install the skills.** Preferred: `/plugin marketplace add Traviseric/best-practices` then `/plugin install best-practices@traviseric`. If the plugin path is not available on this version, run `./install.sh` (macOS, Linux, Git Bash) or `.\install.ps1` (PowerShell). Confirm with `./install.sh --check` or `.\install.ps1 -Check`, which exits 0 when the installed skills match the source.
-2. **Wire the hooks into their project**, not this repo: copy `hooks/` into `<their-project>/.claude/hooks/`, copy `templates/settings.json.template` to `<their-project>/.claude/settings.json`, and set the build command for their stack (see `hooks/build-gate.example.json`). On Windows without python3, use the `.ps1` forms. Details and the recorded tests are in `docs/HOOKS.md`.
+2. **Offer to wire the hooks into their project**, not this repo, and do it only with their yes: copy `hooks/` into `<their-project>/.claude/hooks/`, then MERGE the three hook entries from `templates/settings.json.template` into their existing `<their-project>/.claude/settings.json` (never overwrite a settings file; show them the diff), and set the build command for their stack (see `hooks/build-gate.example.json`). On Windows without python3, use the `.ps1` forms. Details and the recorded tests are in `docs/HOOKS.md`.
 3. **Give their project a `CLAUDE.md`** from `templates/CLAUDE.md.template` if it has none: a lookup table, the commands, the current focus. Keep it under 100 lines. Add a `.claudeignore` from the template.
-4. **Paste `docs/ROOM_AND_GROUND.md`** into their `CLAUDE.md` (or system prompt) if they write anything that has to move a person: a homepage, a pitch, a report, an email.
+4. **Show them `docs/ROOM_AND_GROUND.md`** if they write anything that has to move a person: a homepage, a pitch, a report, an email. It is a writing method they can adopt by pasting it into their `CLAUDE.md`. Adopting it is their choice, not yours.
 
-## Then run these, in order
+## Then offer these, in order
 
 - `skills/definition-of-done` on whatever they last called finished. Say which rung is proven and what would prove the next one.
-- `skills/clarity-gate` on their homepage or README. If it reads as a wall of text, this is the fix.
+- `skills/clarity-gate` on their homepage or README, if they want it. It reads the page as a stranger would and says whether it lands in five seconds. It fetches nothing they did not point you at.
 - `skills/session-closeout` at the end of the session. Write the handoff; commit only what you own, by explicit path.
 
 ## Rules while you are here
