@@ -1,0 +1,13 @@
+{
+  "name": "best-practices",
+  "version": "2.0.0",
+  "description": "Field-tested skills and guard hooks for AI coding agents: definition-of-done ladder, clarity gate, verification gate, session closeout, room-and-ground writing, secret and conflict-marker guards.",
+  "author": {
+    "name": "Travis Eric",
+    "url": "https://traviseric.com"
+  },
+  "homepage": "https://traviseric.com/claude-code",
+  "repository": "https://github.com/Traviseric/best-practices",
+  "license": "MIT",
+  "keywords": ["claude-code", "skills", "hooks", "best-practices", "definition-of-done", "clarity"]
+}

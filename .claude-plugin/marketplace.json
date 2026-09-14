@@ -1,0 +1,15 @@
+{
+  "name": "traviseric",
+  "owner": {
+    "name": "Travis Eric",
+    "url": "https://traviseric.com"
+  },
+  "plugins": [
+    {
+      "name": "best-practices",
+      "source": ".",
+      "description": "Field-tested skills and guard hooks for AI coding agents: definition-of-done ladder, clarity gate, verification gate, session closeout, room-and-ground writing, secret and conflict-marker guards.",
+      "version": "2.0.0"
+    }
+  ]
+}

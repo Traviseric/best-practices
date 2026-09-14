@@ -1,105 +1,133 @@
 # Best Practices for AI Coding Agents
 
-A field-tested playbook for getting better results from AI coding agents — Claude Code, Codex, Cursor, Aider, and friends.
+You are using Claude in the terminal and you can feel that someone else gets more out of it than you do. Your site says everything and lands nothing. Your sessions end with work you cannot find the next morning. Claude tells you something is done and it is not.
 
-Built by [Travis Eric](https://traviseric.com) from running production agent fleets across a 55+ project portfolio. This is the public foundation; the deeper material lives in [consulting](https://traviseric.com) and [paid courses](https://traviseric.com/courses/ai-first-fundamentals).
+This repo is the part of one person's operating method that transfers without him in the room. Install it and your agent starts asking which rung of "done" it has actually proven, refuses to commit a secret, closes a session with a handoff you can resume, and reads your homepage the way a stranger does in the first five seconds.
 
-> **Tool-agnostic.** The principles apply to any agent. Examples use Claude Code because that's what I run, but the patterns transfer.
+Built by [Travis Eric](https://traviseric.com/claude-code) from running production agent fleets across 137 repositories (counted 2026-09-01). Tool-agnostic where it can be; examples use Claude Code because that is what I run.
 
 ---
 
-## Start Here
+## Install (pick one)
+
+**1. As a Claude Code plugin** (skills and hooks, one command, updates with `/plugin update`):
+
+```
+/plugin marketplace add Traviseric/best-practices
+/plugin install best-practices@traviseric
+```
+
+**2. Clone and link** (works for any agent that reads `~/.claude/skills` or `~/.codex/skills`):
+
+```
+git clone https://github.com/Traviseric/best-practices
+cd best-practices
+./install.sh            # macOS / Linux / Git Bash
+.\install.ps1           # Windows PowerShell
+```
+
+**3. Paste one file.** [docs/ROOM_AND_GROUND.md](docs/ROOM_AND_GROUND.md) is written to be pasted into any `CLAUDE.md` or system prompt. It works alone.
+
+Then tell your agent: *"Install the best-practices skills, audit this project, and run the clarity gate on my homepage."*
+
+---
+
+## What you get
+
+| Skill | What changes |
+|---|---|
+| `definition-of-done` | Every "it's done" becomes a rung: BUILT, DEPLOYED, WORKS, or FED, with the proof named. A green local build proves only BUILT. |
+| `clarity-gate` | Your page, README, or email is read by a simulated stranger for five seconds, then line-edited until it lands. Built for walls of text. |
+| `verification-gate` | Every claim in a document traces to evidence before it ships. Three checks, a claim manifest, a report. |
+| `session-closeout` | Finish or stop honestly, commit only what you own by explicit path, write a handoff the next session can resume from. |
+| `room-and-ground` | Anything that has to move a person is two documents: the paragraph they carry out, and the cold ground under it. Never merged. |
+
+| Hook | What it stops |
+|---|---|
+| `guard-staged-secrets` | A `git commit` whose staged files carry a live provider key. Reads only the index; fails open. |
+| `guard-conflict-markers` | A commit that still contains `<<<<<<<` / `>>>>>>>`. |
+| build gate | A commit when the build is red. The single highest-leverage hook. |
+
+Hooks install per repo: see [docs/HOOKS.md](docs/HOOKS.md).
+
+---
+
+## Start here
 
 | If you want to... | Read this |
 |---|---|
 | Get the principles fast | [best-practices.md](best-practices.md) |
+| Stop your agent lying to you about "verified" | [docs/SEVEN_CHEAP_LIES.md](docs/SEVEN_CHEAP_LIES.md) |
+| Write something a tired reader understands | [docs/ROOM_AND_GROUND.md](docs/ROOM_AND_GROUND.md) |
+| Add the hooks | [docs/HOOKS.md](docs/HOOKS.md) |
+| Turn your `/insights` report into changes | [docs/INSIGHTS.md](docs/INSIGHTS.md) |
 | Audit your existing project | [docs/AUDIT_YOUR_PROJECT.md](docs/AUDIT_YOUR_PROJECT.md) |
-| Add the #1 highest-leverage hook | [docs/PRE_COMMIT_BUILD_GATE.md](docs/PRE_COMMIT_BUILD_GATE.md) |
-| Set up a new project right | [templates/](templates/) + [best-practices.md](best-practices.md) |
+| Set up a new project right | [templates/](templates/) |
 | Cut MCP token bloat | [docs/MCP_OPTIMIZATION.md](docs/MCP_OPTIMIZATION.md) |
 | Organize messy docs | [docs/DOC_ORGANIZATION.md](docs/DOC_ORGANIZATION.md) |
 | Build sites with agents | [docs/WEB_DESIGN_PRINCIPLES.md](docs/WEB_DESIGN_PRINCIPLES.md) |
 
 ---
 
-## What's Inside
+## The quick wins (90 seconds each)
+
+1. **Add a `CLAUDE.md` with a lookup table.** [Template](templates/CLAUDE.md.template). Keeps the agent oriented and keeps the file short.
+2. **Drop in the hooks.** [settings.json template](templates/settings.json.template) wires the build gate, the secrets guard, and the conflict-marker guard. Broken and dangerous commits stop cold.
+3. **Add a `.claudeignore`.** [Template](templates/.claudeignore.template). Stops the agent choking on PDFs and `node_modules/`.
+
+---
+
+## What's inside
 
 ```
 best-practices/
 ├── README.md                          # You are here
-├── CLAUDE.md                          # Pin for agents working on this repo
-├── best-practices.md                  # The flagship guide — 10 principles
+├── best-practices.md                  # The flagship guide: 10 principles
+├── install.sh / install.ps1           # Link or copy skills into ~/.claude/skills
+├── .claude-plugin/                    # Plugin + marketplace manifests
+├── skills/
+│   ├── definition-of-done/
+│   ├── clarity-gate/
+│   ├── verification-gate/
+│   ├── session-closeout/
+│   └── room-and-ground/
+├── hooks/
+│   ├── guard-staged-secrets.ps1|.sh
+│   ├── guard-conflict-markers.ps1|.sh
+│   ├── build-gate.example.json
+│   └── hooks.json                     # Plugin hook wiring
 ├── docs/
-│   ├── PRE_COMMIT_BUILD_GATE.md       # The single highest-leverage hook
-│   ├── AGENTS_MD_CONTRACT.md          # Stable entrypoint for tool-portable repos
-│   ├── MCP_OPTIMIZATION.md            # CLI > MCP, token costs, config switching
-│   ├── DOC_ORGANIZATION.md            # Clean root, docs/ structure
-│   ├── AUDIT_YOUR_PROJECT.md          # Run an agent audit on your project
-│   ├── ENGINEERING_PRINCIPLES.md      # Core principles for AI-first development
-│   ├── PATTERNS.md                    # Fresh context, file-based state, handoffs
-│   └── WEB_DESIGN_PRINCIPLES.md       # Building sites with agents
+│   ├── SEVEN_CHEAP_LIES.md            # How "verified" gets faked, and the honest alternative
+│   ├── ROOM_AND_GROUND.md             # The writing method, paste-ready
+│   ├── HOOKS.md
+│   ├── INSIGHTS.md
+│   ├── PRE_COMMIT_BUILD_GATE.md
+│   ├── AGENTS_MD_CONTRACT.md
+│   ├── MCP_OPTIMIZATION.md
+│   ├── DOC_ORGANIZATION.md
+│   ├── AUDIT_YOUR_PROJECT.md
+│   ├── ENGINEERING_PRINCIPLES.md
+│   ├── PATTERNS.md
+│   └── WEB_DESIGN_PRINCIPLES.md
 └── templates/
     ├── CLAUDE.md.template
     ├── AGENTS.md.template
     ├── .claudeignore.template
-    └── settings.json.template          # The pre-commit build gate, ready to drop in
+    └── settings.json.template
 ```
 
 ---
 
-## The Quick Wins (90 seconds each)
+## What is not here
 
-If you only do three things in your project today:
-
-1. **Add a `CLAUDE.md`** with a lookup table. Use [the template](templates/CLAUDE.md.template). Keeps your agent oriented.
-2. **Add a `.claude/settings.json` pre-commit build gate.** Use [this template](templates/settings.json.template). Stops broken commits cold. See [PRE_COMMIT_BUILD_GATE.md](docs/PRE_COMMIT_BUILD_GATE.md).
-3. **Add a `.claudeignore`.** Use [this template](templates/.claudeignore.template). Stops the agent choking on PDFs and `node_modules/`.
-
----
-
-## How To Audit Any Project
-
-Open your agent in your project and paste:
-
-```
-Read the best practices guide at:
-https://raw.githubusercontent.com/Traviseric/best-practices/main/best-practices.md
-
-Then audit THIS project against those practices. Check:
-1. CLAUDE.md — exists? under 100 lines? has a lookup table?
-2. Structure — feature-based? root clean (< 15 files)?
-3. Documentation — docs/ folder? clear README?
-4. Testing — tests present? test command documented?
-5. Pre-commit hooks — .claude/settings.json with build gate?
-
-Give me a scorecard (1-10 per area) and specific recommendations to improve.
-```
-
-Full prompt and scoring rubric: [docs/AUDIT_YOUR_PROJECT.md](docs/AUDIT_YOUR_PROJECT.md).
-
----
-
-## Going Deeper
-
-This repo is the public foundation. For the production version with the full ruleset, advanced patterns (Loom, Embedded Software Factory, parallel agent orchestration), and the full enterprise audit framework:
-
-- **[AI-First Fundamentals](https://traviseric.com/courses/ai-first-fundamentals)** — 37-lesson course on engineering principles for AI-first development
-- **[Complete AI Development System](https://traviseric.com/products/ai-development-system)** — Full ruleset + enhanced agent framework
-- **[AI Orchestra Method](https://traviseric.com/courses/ai-orchestra-method)** — Scale to many parallel agent instances
-- **[Travis Eric — Consulting](https://traviseric.com)** — For teams adopting AI-first development
-- **[AI Builders Lab on Skool](https://www.skool.com/ai-builders-lab-6883)** — Free community
+The full principle set, the overnight autonomous runner, worktree discipline at fleet scale, the skill-authoring loop, the client Business Brain, and the method for mining your own transcripts to see your own prompting style. Those need narration, or my operating system around them, to transfer. They live in the [course](https://traviseric.com/courses/ai-first-fundamentals) and in [consulting](https://traviseric.com/consulting).
 
 ---
 
 ## Contributing
 
-Found a pattern that works? PRs welcome. Keep additions:
-- **Tool-agnostic** when possible (or label tool-specific clearly)
-- **Field-tested** (not theoretical)
-- **Short** (one concrete rule per file/section, not essays)
-
----
+Field-tested only. If a pattern saved you a real incident, open a PR with the pattern and the incident (anonymized). Theory without a scar goes in an issue.
 
 ## License
 
-MIT. Use it however you want. Attribution appreciated but not required.
+MIT. Use it, fork it, ship it.
