@@ -47,6 +47,8 @@ That is the loop: the lamps light the abyss; the outcome shows where it was stil
 
 The `lamps` skill in this repository runs the set as blind parallel readers at the four moments and writes a reconciled map. The first lamps run on the funnel this repository sits in found a plugin hook firing on every shell command, a dead link on a page whose thesis was verification, a paid product that was a public file with no lock on it, and a paid step pointing at a free course. The hook, the link, and the unlocked file were fixed the same day. The paid step is still open, and saying so here is the point. The lamps do not make you right. They make the dark regions cost something before the decider finds them.
 
-Provenance: this came from the private system's philosophy register; the update path is this repository.
+---
 
-Next: `skills/lamps/SKILL.md`, then `the-repo-already-knew.md`.
+Provenance: ported from a private operating system's philosophy register on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `skills/lamps/SKILL.md` (https://github.com/Traviseric/best-practices/blob/main/skills/lamps/SKILL.md), then `philosophy/the-repo-already-knew.md`.

@@ -115,4 +115,4 @@ production incident someone else finds first.
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `philosophy/README.md`.
+Next: `philosophy/README.md` (https://github.com/Traviseric/best-practices/blob/main/philosophy/README.md).

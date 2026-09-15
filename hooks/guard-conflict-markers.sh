@@ -12,7 +12,7 @@
 # FAILS OPEN on any error.
 #
 # Wiring (Claude Code, .claude/settings.json):
-#   { "matcher": "Bash", "hooks": [ { "type": "command", "if": "Bash(git *)",
+#   { "matcher": "Bash", "hooks": [ { "type": "command", "if": "Bash(git commit *)",
 #     "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-conflict-markers.sh\"",
 #     "timeout": 30 } ] }
 #

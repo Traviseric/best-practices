@@ -38,6 +38,8 @@ This is an observation, not a law, and the honest reasons are written in the lon
 
 It became the second of the seven cheap lies in this repository: a live process is not a finished job, and a clean report from a broken reporter is the cleanest of all.
 
-Provenance: this came from the private system's philosophy register; the update path is this repository.
+---
 
-Next: `instruments-that-doubt-themselves.md`.
+Provenance: ported from a private operating system's philosophy register on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `philosophy/instruments-that-doubt-themselves.md`.

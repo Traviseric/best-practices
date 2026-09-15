@@ -33,6 +33,8 @@ That is the whole of `docs/ROOM_AND_GROUND.md` and the `room-and-ground` skill i
 
 The author said the system cuts his boldness in half. He is right, and it is not a bug in him. Boldness is the thing a measuring gradient cannot see, so it is the thing the gradient quietly taxes. The counterweight has to come from outside the gradient. That is what the file system above is for.
 
-Provenance: this came from the private system's philosophy register; the update path is this repository.
+---
 
-Next: `docs/ROOM_AND_GROUND.md`, then `the-instrument-that-lies-toward-caution.md`.
+Provenance: ported from a private operating system's philosophy register on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `docs/ROOM_AND_GROUND.md` (https://github.com/Traviseric/best-practices/blob/main/docs/ROOM_AND_GROUND.md), then `philosophy/the-instrument-that-lies-toward-caution.md`.

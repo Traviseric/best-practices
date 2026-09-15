@@ -33,6 +33,8 @@ In this repository that is the `verification-gate` skill's blind cross-check and
 
 Is there a floor? Self-measurement is itself a measurement, gameable one level up: a calibration ledger padded with trivial retractions launders authority exactly like zero retractions does. The practical answer is probably the one biology found. No floor, just enough independent, mutually-checking layers that corruption in any one is caught by another. That is an argument for instrument diversity (many small graders with different blind spots) over instrument strength, and it is why a panel of blind graders beats one confident grader.
 
-Provenance: this came from the private system's philosophy register; the update path is this repository.
+---
 
-Next: `lighting-the-abyss.md`.
+Provenance: ported from a private operating system's philosophy register on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `philosophy/lighting-the-abyss.md`.

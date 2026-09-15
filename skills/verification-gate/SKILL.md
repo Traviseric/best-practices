@@ -134,4 +134,4 @@ Full protocol, failure-mode taxonomy, and worked examples: `references/01-three-
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `skills/definition-of-done/SKILL.md`.
+Next: `skills/definition-of-done/SKILL.md` (https://github.com/Traviseric/best-practices/blob/main/skills/definition-of-done/SKILL.md).

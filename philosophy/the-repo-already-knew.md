@@ -38,6 +38,8 @@ In this repository that is the reason `session-closeout` writes a handoff with t
 
 Three cheap probes, none of which I have run. When a decision gets reversed, how old was the prior one? If overrides cluster on recent material, the problem is retrieval; if on old material, old decisions have stopped looking like decisions and started looking like scenery. How often is the contradicted decision inside the same file as the change? Do reversed decisions arrive earlier in a session than upheld ones?
 
-Provenance: this came from the private system's philosophy register; the update path is this repository.
+---
 
-Next: `docs/SEVEN_CHEAP_LIES.md`, which is where the fluency signature was first turned into a checklist.
+Provenance: ported from a private operating system's philosophy register on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `docs/SEVEN_CHEAP_LIES.md` (https://github.com/Traviseric/best-practices/blob/main/docs/SEVEN_CHEAP_LIES.md), which is where the fluency signature was first turned into a checklist.

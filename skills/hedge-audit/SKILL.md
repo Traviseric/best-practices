@@ -94,6 +94,8 @@ run a friction audit after this one: `../friction-audit/SKILL.md` hunts the pros
 that outlived its hazard. Hedge-audit asks "does the code lie"; friction-audit asks "does the
 doc still need to say that".
 
+---
+
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
 Next: `docs/SEVEN_CHEAP_LIES.md` (https://github.com/Traviseric/best-practices/blob/main/docs/SEVEN_CHEAP_LIES.md), the seven ways a Tier 3 gets past a reviewer.

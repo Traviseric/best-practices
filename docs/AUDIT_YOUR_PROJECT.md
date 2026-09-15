@@ -1,213 +1,113 @@
-# Audit Your Project for Agent Optimization
+# Audit a Project for Agent Readiness
 
-Use any AI coding agent (Claude Code, Codex, Cursor, Aider) to analyze your project against best practices and get recommendations for better agent performance.
+A procedure an agent runs on a repository it has never seen, producing findings with evidence attached. It replaces the scorecard that used to live here, for a reason worth stating first.
 
----
+**Why not a scorecard.** The earlier version of this document asked the agent for a score out of ten per area. A score is an opinion with nothing under it, and an agent asked for one will produce a plausible number whether or not it looked. That is the same defect a private portfolio hit at scale in August 2026: a capability board reported that all twenty-two sites in a fleet "break first at owner login". Every word was defensible and the conclusion was false. One site had an observed failure, one was ambiguous, and the other twenty had never been checked at all. Three states had collapsed into one word. See `docs/ENGINEERING_PRINCIPLES.md` rule 2.
 
-## Quick Start
-
-### 1. Clone this repo (or just reference it by URL)
-
-```bash
-git clone https://github.com/Traviseric/best-practices.git
-```
-
-### 2. Open your agent in YOUR project
-
-```bash
-cd /path/to/your/project
-# Claude Code:
-claude
-# or Codex / Cursor / Aider — same prompt works
-```
-
-### 3. Run the Audit
-
-Paste this prompt into your agent:
-
-```
-Read the best practices guide at:
-https://raw.githubusercontent.com/Traviseric/best-practices/main/best-practices.md
-
-Then audit THIS project against those practices. Check:
-
-1. CLAUDE.md - Does it exist? Is it under 100 lines? Does it have a lookup table?
-2. Project structure - Is it feature-based? Are files organized logically?
-3. Documentation - Is there a docs/ folder? Is root clean (< 15 files)?
-4. Testing - Are tests present? Is there a clear test command?
-5. Commands - Are build/test/dev commands documented?
-
-Give me a scorecard (1-10 for each area) and specific recommendations to improve.
-```
+So this audit has no scores. Every finding carries a verdict from a fixed vocabulary, and one of the verdicts is "I did not check this".
 
 ---
 
-## What the Audit Checks
+## The verdicts
 
-### 1. CLAUDE.md Quality
+| Verdict | Means | Requires |
+|---|---|---|
+| `PASS` | Checked, and it is fine | The command you ran or the file you read |
+| `FAIL` | Checked, and it is broken | The output, quoted |
+| `UNMEASURED` | Not checked, and here is why | One sentence naming the blocker |
 
-| Check | Good | Needs Work |
-|-------|------|------------|
-| Exists | ✅ Has CLAUDE.md | ❌ No CLAUDE.md |
-| Length | ✅ Under 100 lines | ❌ Over 100 lines |
-| Lookup table | ✅ Has concept→files table | ❌ No lookup table |
-| Commands | ✅ Build/test documented | ❌ Commands missing |
-| Current focus | ✅ States what's active | ❌ No focus section |
-
-### 2. Project Structure
-
-| Check | Good | Needs Work |
-|-------|------|------------|
-| Organization | ✅ Feature-based folders | ❌ Type-based (all controllers together) |
-| Naming | ✅ Consistent conventions | ❌ Mixed naming styles |
-| Depth | ✅ Shallow (2-3 levels) | ❌ Deep nesting (5+ levels) |
-| Root | ✅ Clean (< 15 files) | ❌ Cluttered (20+ files) |
-
-### 3. Documentation
-
-| Check | Good | Needs Work |
-|-------|------|------------|
-| docs/ folder | ✅ Organized documentation | ❌ Docs scattered everywhere |
-| README | ✅ Clear setup instructions | ❌ Missing or outdated |
-| Specs | ✅ specs/ for features | ❌ No specifications |
-
-### 4. Testing
-
-| Check | Good | Needs Work |
-|-------|------|------------|
-| Tests exist | ✅ Has test files | ❌ No tests |
-| Test command | ✅ `npm test` or equivalent works | ❌ No clear way to run tests |
-| Coverage | ✅ Critical paths tested | ❌ Minimal coverage |
+`UNMEASURED` is never a failure. It is the honest half of the finding. An audit with no `UNMEASURED` rows in a repository you met ten minutes ago is itself the finding.
 
 ---
 
-## Sample Audit Output
+## The procedure
 
-When you run the audit, Claude will give you something like:
+Run these in order. Stop and write the audit even if you cannot finish; a partial audit with honest verdicts is worth more than a complete one with guesses.
+
+### 1. Find the entry point
+
+Look for `CLAUDE.md`, `AGENTS.md`, `.cursorrules`, or an equivalent. Record which exist, how long each is, and whether more than one contains detailed instructions.
+
+Write `FAIL` if two files both carry a maintained playbook. That is the drift described in `docs/AGENTS_MD_CONTRACT.md`, and it is the most expensive thing on this list because it is silent.
+
+### 2. Read the playbook as a stranger
+
+Read the entry file straight through, once, at reading speed. Then, without looking back, write down what this project is, how to build it, how to test it, and what the team is working on right now.
+
+Anything you could not answer is a `FAIL` on that item, and the answer you would have needed is the fix. This is the same instrument as `skills/clarity-gate`, pointed at a document instead of a page.
+
+### 3. Check the lookup table
+
+A useful playbook maps concepts to files. Confirm a table exists and that its paths resolve. Pick three rows at random and open the files.
+
+`FAIL` a row whose path does not exist. `FAIL` the table if rows carry paragraph-length summaries instead of pointers; `docs/DOC_ORGANIZATION.md` rule 2 explains what that costs.
+
+### 4. Run the build and the tests
+
+Find the commands. Run them exactly as a CI system would, not as a human would: `CI=true` where that is meaningful, the full command rather than an abbreviated one.
+
+Record the actual output, including test tallies, not just the exit status. A suite that aborts during collection reports one tidy import error and runs zero tests while exiting cleanly in some harnesses. If you piped the command, you do not know its exit code. Lies 6 and 7 in `docs/SEVEN_CHEAP_LIES.md` are the two that bite here.
+
+If a command is undocumented, that is a `FAIL` on documentation, and the audit continues with `UNMEASURED` on the build.
+
+### 5. Look at the root
+
+Count the files at the repository root. Note anything that is not source, configuration, or one of the standard entry files: loose logs, stray scripts, abandoned directories, a second copy of the repo.
+
+More than about fifteen root files is a `FAIL` on navigability. Agents search instead of navigating when there is no obvious entry, and searching costs tokens and returns the wrong file.
+
+### 6. Check the guards
+
+Look in `.claude/settings.json`, or the equivalent, for `PreToolUse` hooks. Confirm three things: a build gate, a secrets guard, and a conflict-marker guard.
+
+For each, check the wiring, not just the presence. A conditional placed on the matcher group rather than on the hook entry runs the hook on every command instead of on commits, which is slow enough that someone will eventually disable it. `docs/HOOKS.md` has the correct shape and the recorded tests.
+
+### 7. Look for stale operational claims
+
+Grep the documentation for "not yet", "coming soon", "will be", "TODO", and "in progress". Open each hit and compare it against the code.
+
+Every hit is a claim with a date on it that nobody re-checked. Agents obey documentation, so a stale runbook actively causes wrong work. In one measured case a playbook said its automation was "not built yet" while eight shipped stages sat unused, and agents did the work by hand for weeks.
+
+### 8. Check whether the last "done" was true
+
+Find the most recent thing the repository claims is finished: a changelog entry, a closed issue, a feature in the README. Then establish which rung it actually reached, using `skills/definition-of-done`. A green build proves the code compiles and nothing else.
+
+This is usually the most informative finding in the audit, and it is the one a scorecard never surfaces.
+
+---
+
+## The output
+
+Write the audit as a list of findings, most severe first. Each finding:
 
 ```
-## Project Audit: your-project
+[VERDICT] Area: one-sentence statement of what is true
+Evidence: the command you ran and its output, or the file and line you read
+Fix: the smallest change that would move this to PASS
+```
 
-### Scorecard
-| Area | Score | Status |
-|------|-------|--------|
-| CLAUDE.md | 3/10 | ❌ Missing |
-| Structure | 6/10 | 🟡 Needs work |
-| Documentation | 4/10 | ❌ Scattered |
-| Testing | 7/10 | ✅ Good |
-| Commands | 5/10 | 🟡 Partial |
+Close with three lines: the count by verdict, the single highest-leverage fix, and an explicit list of what you did not check and why.
 
-### Recommendations
+Do not produce a number. If the person wants a summary, the count by verdict is the summary, and it is honest in a way a score cannot be.
 
-**High Priority:**
-1. Create CLAUDE.md with lookup table (template below)
-2. Move docs from root to docs/ folder
-3. Document build command in CLAUDE.md
+---
 
-**Medium Priority:**
-4. Reorganize src/ to feature-based structure
-5. Add specs/ folder for feature specifications
+## The prompt
 
-**Low Priority:**
-6. Add .claudeignore for large files
-7. Consolidate config files
+Paste this into an agent working in the repository you want audited:
+
+```
+Read https://raw.githubusercontent.com/Traviseric/best-practices/main/docs/AUDIT_YOUR_PROJECT.md
+and run that procedure on this repository.
+
+Follow it exactly: run the commands rather than reading them, quote real output as
+evidence, and use UNMEASURED wherever you could not check something. Do not give me
+a score. Finish with the count by verdict, the highest-leverage fix, and what you
+did not check.
 ```
 
 ---
 
-## After the Audit
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-### Create CLAUDE.md
-
-Use this template:
-
-```markdown
-# Project: [Your Project Name]
-
-## What This Is
-One-line description.
-
-## Lookup Table
-| Concept | Files | Search Terms |
-|---------|-------|--------------|
-| [Main Feature] | src/[folder]/ | [keywords] |
-| API | src/routes/ | endpoint, handler |
-| Database | prisma/ or src/db/ | query, model |
-| Tests | __tests__/ or src/**/*.test.ts | test, mock |
-
-## Commands
-```bash
-npm run build    # Build the project
-npm test         # Run tests
-npm run dev      # Start dev server
-```
-
-## Conventions
-- [Your coding conventions]
-- [Naming patterns]
-- [Test requirements]
-
-## Current Focus
-[What you're actively working on]
-```
-
-### Fix Common Issues
-
-| Issue | Fix |
-|-------|-----|
-| No CLAUDE.md | Create one using template above |
-| CLAUDE.md too long | Split into linked docs, keep root < 100 lines |
-| No lookup table | Add concept→files mapping |
-| Cluttered root | Move to docs/, config/, scripts/ |
-| No test command | Add to package.json scripts |
-| Type-based structure | Reorganize to feature-based |
-
----
-
-## Re-run After Changes
-
-After making improvements, run the audit again:
-
-```
-Re-audit this project against the best practices.
-Show me the updated scorecard and what improved.
-```
-
----
-
-## Path Reference
-
-When running the audit, you can either:
-
-**Reference the URL directly** (works in any agent that can fetch URLs):
-```
-https://raw.githubusercontent.com/Traviseric/best-practices/main/best-practices.md
-```
-
-**Or reference a local clone**:
-```
-# Windows
-D:\path\to\best-practices\best-practices.md
-
-# Mac/Linux
-~/code/best-practices/best-practices.md
-```
-
----
-
-## Learn More
-
-**Free Resources:**
-- [AI-First Fundamentals](https://traviseric.com/courses/ai-first-fundamentals) - 37 lessons on engineering principles
-- [best-practices.md](../best-practices.md) - The principles used in this audit
-
-**Go Deeper:**
-- [Complete AI Development System](https://traviseric.com/products/ai-development-system) - Advanced guides including full codebase design patterns
-- [AI Orchestra Method](https://traviseric.com/courses/ai-orchestra-method) - Scale to many parallel instances
-- [Travis Eric — Consulting](https://traviseric.com) - For teams adopting AI-first development
-
----
-
-Provenance: from a private operating system, kept current in this repository at github.com/Traviseric/best-practices.
-
-Next: `skills/definition-of-done/SKILL.md`.
+Next: `skills/definition-of-done/SKILL.md` (https://github.com/Traviseric/best-practices/blob/main/skills/definition-of-done/SKILL.md).

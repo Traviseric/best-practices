@@ -51,4 +51,4 @@ file gaps as a CLAUDE.md rule, a hook, a skill, or a backlog task, and log it in
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `skills/session-closeout/SKILL.md`.
+Next: `skills/session-closeout/SKILL.md` (https://github.com/Traviseric/best-practices/blob/main/skills/session-closeout/SKILL.md).

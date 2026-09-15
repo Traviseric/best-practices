@@ -75,6 +75,8 @@ paid step pointing at a free course. Three were fixed the same day; the fourth i
 open. The reconciled map and what it changed are summarized in
 `philosophy/lighting-the-abyss.md` (https://github.com/Traviseric/best-practices/blob/main/philosophy/lighting-the-abyss.md).
 
+---
+
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `../room-and-ground/SKILL.md`, the skill STORY hands off to.
+Next: `skills/room-and-ground/SKILL.md` (https://github.com/Traviseric/best-practices/blob/main/skills/room-and-ground/SKILL.md), the skill the STORY lamp hands off to.

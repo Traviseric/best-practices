@@ -60,10 +60,10 @@ Two details that are easy to get wrong, and both were wrong in this file until a
 
 ## Rules
 
-- **Commit `.claude/settings.json` to the repo** — not `.claude/settings.local.json`. You want every machine and every overnight worker to inherit the gate.
+- **Commit `.claude/settings.json` to the repo**, not `.claude/settings.local.json`. You want every machine and every overnight worker to inherit the gate.
 - **Use `--no-lint` for Next.js** if your project has pre-existing lint warnings. The build catches *real* type/build errors; lint is a separate concern.
 - **Timeout 180s** is fine for most projects. Bump it for large monorepos.
-- **The hook only triggers on `git commit`** — normal development isn't slowed.
+- **The hook only triggers on `git commit`**: normal development isn't slowed.
 
 ---
 
@@ -72,7 +72,7 @@ Two details that are easy to get wrong, and both were wrong in this file until a
 After creating the file:
 
 ```bash
-# Force a build break — comment out an import or break a type
+# Force a build break: comment out an import or break a type
 # Then ask the agent to commit
 git commit -m "test"
 ```
@@ -83,12 +83,12 @@ You should see the hook fire and the commit block. Restore the broken code, re-c
 
 ## Why This Matters
 
-Across many production overnight runs, the #1 source of "agent shipped broken code" is missing pre-commit verification. A 60-second build check eliminates an entire class of failure — and it's one file.
+Across many production overnight runs, the #1 source of "agent shipped broken code" is missing pre-commit verification. A 60-second build check eliminates an entire class of failure, and it's one file.
 
 Every repo should have it.
 
 ---
 
-Provenance: from a private operating system, kept current in this repository at github.com/Traviseric/best-practices.
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
 Next: `docs/HOOKS.md`.

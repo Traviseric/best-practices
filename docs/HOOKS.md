@@ -13,10 +13,10 @@ close the three ways a "green" session most often lands something broken.
 ## Install (two minutes)
 
 1. Copy `hooks/` from this repo into your project at `.claude/hooks/`.
-2. Copy `templates/settings.json.template` to `.claude/settings.json`.
+2. If you have no `.claude/settings.json`, copy `templates/settings.json.template` to it. If you already have one, MERGE the three hook entries into your existing `hooks.PreToolUse` array. Never overwrite a settings file you did not write; it carries permissions and other hooks you will not get back.
 3. Replace `<build-command>` with your stack's cheapest check (see `hooks/build-gate.example.json`).
 4. On Windows with PowerShell as the hook shell, swap the `.sh` lines for the `.ps1` lines shown in the template's comment.
-5. Prove it once: stage a file containing `sk_live_` followed by 24 letters and try to commit through the agent. You should see the deny reason, not a commit.
+5. Prove it once: stage a file containing the Stripe live prefix followed by 24 random mixed-case alphanumerics, and try to commit through the agent. You should see the deny reason, not a commit. If it allows, read the fixture warning under Recorded tests before you conclude the guard is broken.
 
 Both guards ship as a `.ps1` and a `.sh` with identical behavior. The `.sh` needs `bash`, `git`, and one JSON reader (`python3`, `node`, or `jq`). With `python3` present the whole scan runs in one process, which is the path to use on Git Bash for Windows: that shell stalls intermittently when a script spawns many short pipelines, and the pure-bash fallback loop does exactly that. On Windows prefer the `.ps1` files.
 
@@ -66,15 +66,13 @@ For a conflict marker: resolve the conflict, restage, commit again. If the file 
 
 Same shape: read stdin JSON, scope to the command you care about, read only the index, deny with a reason someone can act on in under a minute, fail open on everything else. Measure the false-positive rate on your own repos before wiring it. A guard qualifies when it triggers rarely, checks cheaply, fails open, denies only objectively broken states, and has a measured false-positive rate of zero.
 
----
-
-Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
-
 ## Recorded tests
 
 Run 2026-09-14 against `hooks/guard-staged-secrets.sh` and `hooks/guard-conflict-markers.sh` in a throwaway git repository, feeding each script the hook payload on stdin. Reproduce them yourself: `git init` a scratch repo, stage the file described, and pipe `{"tool_input":{"command":"git commit -m x"},"cwd":"<repo>"}` into the script.
 
 To keep this file free of key-shaped strings, the cases below describe the shape instead of printing it. Build each one by concatenating the prefix with random alphanumerics of the stated length.
+
+**Build your fixture carefully, or you will misread a correct allow as a broken guard.** The placeholder exemption skips any line containing a sequential alphabet run (`abcdefgh`, case-insensitively), a long run of zeros, `1234567890`, `qwerty`, or the words fake, dummy, example, placeholder, or redacted. While recording these tests the author twice wrote a fixture key containing `AbCdEfGh`, watched both guards allow it, and briefly concluded the PowerShell twin was broken. It was not. Use genuinely random characters and read the exemption list in the script before filing a bug.
 
 | Case | Staged content | Expected | Result |
 |---|---|---|---|
@@ -89,8 +87,20 @@ To keep this file free of key-shaped strings, the cases below describe the shape
 
 One more result, unplanned and worth having: the first attempt to publish this table was **rejected by GitHub push protection**, because a table of realistic test keys is indistinguishable from a leak. That is the correct behavior from a second, independent guard, and it is why the cases above describe shapes rather than print them. Two lessons: write your fixtures so they cannot be mistaken for the real thing, and do not treat your own guard as the only one in the chain.
 
-The PowerShell twins were exercised the same way when they were written, including the fail-open path on malformed JSON. The bash scripts do the whole scan in one `python3` process when python3 exists; without it they fall back to a shell loop that has stalled intermittently on Git Bash, so on Windows without python3 prefer the `.ps1` forms.
+The PowerShell twins were run the same way on 2026-09-15, against the same throwaway repository:
+
+| Case | Expected | Result |
+|---|---|---|
+| Stripe live key plus a private key block, both staged | deny, both listed | **deny**, "2 staged file(s)", named each file and its kind |
+| Conflict-marker file staged | deny | **deny**, named the file |
+| Malformed payload on stdin | allow (fail open) | **allow** |
+| Fixture key containing a sequential alphabet run | allow (placeholder exemption) | **allow**, matching the bash guard exactly |
+ The bash scripts do the whole scan in one `python3` process when python3 exists; without it they fall back to a shell loop that has stalled intermittently on Git Bash, so on Windows without python3 prefer the `.ps1` forms.
 
 Note on `install.sh --check`: it compares the copies in `~/.claude/skills` with this repo. If another system already installs skills with the same names there (the author's own machines do), the check reports drift that is not yours. Test against a throwaway home (`HOME=/tmp/x ./install.sh`) before reading a drift report as a bug.
+
+---
+
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
 Next: `docs/SEVEN_CHEAP_LIES.md`.

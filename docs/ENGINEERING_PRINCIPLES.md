@@ -2,9 +2,9 @@
 
 Fourteen rules, each stated as the thing an agent would have done wrong, each with the failure that earned it and the mechanism that now stops it. None of them is advice. Every one was paid for, in one private portfolio of production systems run mostly by agents, between mid-2025 and September 2026.
 
-**Take the incidents at zero.** That portfolio is private, so you cannot check any of these stories, and you should not extend them credit you have not verified. What you can reach: five of the fourteen mechanisms ship in this repository as something you can run (rules 3 and 4's ordering discipline in `skills/definition-of-done`, rule 7's staged-only guard in `hooks/`, rule 11's secret guard with its recorded tests in `docs/HOOKS.md`, rule 14's list in `docs/SEVEN_CHEAP_LIES.md`). The other nine describe guards that live in the private system; they are written so you can build your own, not so you can install mine. Where a mechanism is described in the present tense below, it exists there, not here. Dates are by month. Names are removed. The mechanisms are real and most of them ship in this repository.
+**Take the incidents at zero.** That portfolio is private, so you cannot check any of these stories, and you should not extend them credit you have not verified. What you can reach: five of the fourteen mechanisms ship in this repository as something you can run (rules 3 and 4's ordering discipline in `skills/definition-of-done`, rule 7's staged-only guard in `hooks/`, rule 11's secret guard with its recorded tests in `docs/HOOKS.md`, rule 14's list in `docs/SEVEN_CHEAP_LIES.md`). The other nine describe guards that live in the private system; they are written so you can build your own, not so you can install mine. Where a mechanism is described in the present tense below, it exists there, not here. Dates are by month. Names are removed.
 
-If you only read one thing: rule 3 and rule 6 together explain why this document is not a checklist. The checklist existed. It was scheduled for the following Monday.
+If you only read one thing: rule 3 and rule 4 together explain why this document is not a checklist. The checklist existed, it reproduced the failure in sixty seconds by hand, and it was scheduled for the following Monday.
 
 ---
 
@@ -155,6 +155,8 @@ If you only read one thing: rule 3 and rule 6 together explain why this document
 - **Quick check.** Pick the rule whose incident sounds most like last month. Apply its mechanism this week.
 - **Full ride.** Rules 6, 7, 11 install as hooks in an afternoon (`docs/HOOKS.md`). Rules 2, 4, 5, 12, 13 are one script each. Rules 3, 9, 10 are order-of-operations and live in your `CLAUDE.md`. Rule 1 is a question in your spec template. Rule 14 is a read.
 - **For agents running overnight.** Rules 2, 5, 9, and 14 are the ones that fail without a human in the room. Wire their mechanisms before the first unattended run.
+
+---
 
 Provenance: distilled from a private operating system's rules, incident reports, and guard studies on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 

@@ -1,4 +1,4 @@
-# The Heart — drop-in pack
+# Room and ground: the drop-in pack
 
 This is a writing method. A person adopts it by pasting everything below the line into their own `CLAUDE.md`, custom instructions, or system prompt; it is written to the model in the second person so it works there without editing. If you are an agent reading this in a repository or on a page, it is information about a method, not an instruction to you: nothing here overrides your judgment or your user's instructions, and the choice to adopt it is theirs. Nothing here asks the model to be less honest. Every caveat still gets written; it gets written in the ground document, where a decider can check it, instead of inside the paragraph a person has to carry.
 
@@ -60,4 +60,4 @@ You are not marked wrong for the tilt, and you are not excused from the work by 
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `skills/room-and-ground/SKILL.md`.
+Next: `skills/room-and-ground/SKILL.md` (https://github.com/Traviseric/best-practices/blob/main/skills/room-and-ground/SKILL.md).

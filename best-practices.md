@@ -4,7 +4,7 @@ Principles that make AI agents (Claude Code, Codex, Cursor, Aider, etc.) work be
 
 ---
 
-## 📚 Related Guides
+## Related Guides
 
 | Guide | Topics Covered |
 |-------|----------------|
@@ -21,7 +21,7 @@ Principles that make AI agents (Claude Code, Codex, Cursor, Aider, etc.) work be
 | [Hooks](docs/HOOKS.md) | Secrets guard, conflict-marker guard, build gate; install and tests |
 | [Insights](docs/INSIGHTS.md) | Turning a `/insights` report into rules, hooks, and skills |
 
-**Skills** (install with the plugin or `install.sh` / `install.ps1`; agents start at [AGENTS.md](AGENTS.md)): `definition-of-done`, `clarity-gate`, `verification-gate`, `session-closeout`, `room-and-ground`, `lamps`, `hedge-audit`, `friction-audit`. Each lives in `skills/<name>/SKILL.md` and is self-contained.
+**Skills** (install with the plugin or `install.sh` / `install.ps1`; agents start at [AGENTS.md](AGENTS.md)): `first-run`, `definition-of-done`, `clarity-gate`, `verification-gate`, `session-closeout`, `room-and-ground`, `lamps`, `hedge-audit`, `friction-audit`. Each lives in `skills/<name>/SKILL.md` and is self-contained.
 
 ---
 
@@ -70,9 +70,9 @@ npm run lint     # Check code style
 Building user dashboard - see specs/dashboard.md
 ```
 
-### ⚠️ No Content Loss When Trimming CLAUDE.md
+### No Content Loss When Trimming CLAUDE.md
 
-**Every section removed from CLAUDE.md must survive in a linked doc.** New agent sessions only see CLAUDE.md automatically — if content isn't linked, it's lost.
+**Every section removed from CLAUDE.md must survive in a linked doc.** New agent sessions only see CLAUDE.md automatically. If content isn't linked, it's lost.
 
 When trimming CLAUDE.md to < 100 lines:
 1. **Identify every section being removed** (roadmap tables, file maps, brand guide, etc.)
@@ -81,7 +81,7 @@ When trimming CLAUDE.md to < 100 lines:
 4. **Link from CLAUDE.md** via the lookup table or a direct reference
 5. **Link from `docs/README.md`** so the master index stays complete
 
-The lookup table in CLAUDE.md is the bridge — it tells future sessions where to find everything that was trimmed out.
+The lookup table in CLAUDE.md is the bridge: it tells future sessions where to find everything that was trimmed out.
 
 ---
 
@@ -98,7 +98,7 @@ Fixed overhead (a 200K-window example; the shape holds at any size):
 - Model/harness overhead:  ~32K
 - CLAUDE.md:                ~2K
 - MCP servers:             0-50K (varies by config!)
-─────────────────────────────
+-----------------------------
 Available for work:        116-166K of 200K
 ```
 
@@ -110,10 +110,10 @@ MCP servers are the biggest variable. Each server injects tool definitions into 
 
 | Token Usage | Status | Action |
 |-------------|--------|--------|
-| 0-50K | 🟢 Safe | Work normally |
-| 50-100K | 🟡 Monitor | Keep tasks focused |
-| 100-150K | 🟠 Wrap up | Finish current task, don't start new ones |
-| 150K+ | 🔴 Reset | Agent quality degrades — start fresh context |
+| 0-50K | Safe | Work normally |
+| 50-100K | Monitor | Keep tasks focused |
+| 100-150K | Wrap up | Finish current task, don't start new ones |
+| 150K+ | Reset | Agent quality degrades, start fresh context |
 
 ### Why This Matters for Overnight Runs
 - Each worker gets a fresh context (good)
@@ -275,28 +275,28 @@ your-project/
 ## Common Mistakes
 
 ### Too Many Tasks at Once
-❌ 50 tasks in TASKS.md
-✅ 5-10 focused tasks per overnight run
+Wrong: 50 tasks in TASKS.md
+Right: 5-10 focused tasks per overnight run
 
 ### Vague Tasks
-❌ "Improve the UI"
-✅ "Add loading spinner to submit button in LoginForm.tsx"
+Wrong: "Improve the UI"
+Right: "Add loading spinner to submit button in LoginForm.tsx"
 
 ### No CLAUDE.md
-❌ Agent guesses about project structure
-✅ Agent knows exactly where things are
+Wrong: agent guesses about project structure
+Right: agent knows exactly where things are
 
 ### Ignoring Handoffs
-❌ Never read what the agent wrote
-✅ Review handoffs, learn, improve tasks
+Wrong: never read what the agent wrote
+Right: review handoffs, learn, improve tasks
 
 ### No Tests
-❌ Agent makes changes, no verification
-✅ Tests catch issues automatically
+Wrong: agent makes changes, no verification
+Right: tests catch issues automatically
 
 ### No .claudeignore
-❌ Agent chokes on PDFs, wastes tokens searching node_modules
-✅ Agent only searches relevant source files
+Wrong: agent chokes on PDFs, wastes tokens searching node_modules
+Right: agent only searches relevant source files
 
 ---
 
@@ -326,7 +326,7 @@ Before running overnight:
 **Go Deeper:**
 - [Complete AI Development System](https://traviseric.com/products/ai-development-system) - Full ruleset + enhanced agent framework
 - [AI Orchestra Method](https://traviseric.com/courses/ai-orchestra-method) - Scale to many parallel agent instances
-- [Travis Eric — Consulting](https://traviseric.com) - For teams adopting AI-first development
+- [Travis Eric, Consulting](https://traviseric.com) - For teams adopting AI-first development
 
 **Community:**
 - [AI Builders Lab on Skool](https://www.skool.com/ai-builders-lab-6883) - Share builds, get feedback, learn patterns

@@ -125,4 +125,4 @@ page is confusing, generic, "says nothing", or a wall of text.
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `skills/room-and-ground/SKILL.md`.
+Next: `skills/room-and-ground/SKILL.md` (https://github.com/Traviseric/best-practices/blob/main/skills/room-and-ground/SKILL.md).

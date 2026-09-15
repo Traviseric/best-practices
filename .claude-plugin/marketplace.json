@@ -8,8 +8,8 @@
     {
       "name": "best-practices",
       "source": ".",
-      "description": "Field-tested skills and guard hooks for AI coding agents: definition-of-done ladder, clarity gate, verification gate, session closeout, room-and-ground writing, secret and conflict-marker guards.",
-      "version": "2.2.1"
+      "description": "Field-tested skills and guard hooks for AI coding agents: a two-minute first-run sweep, the definition-of-done ladder, clarity gate, verification gate, session closeout, room-and-ground writing, lamps, hedge audit, friction audit, and secret and conflict-marker commit guards.",
+      "version": "2.3.0"
     }
   ]
 }

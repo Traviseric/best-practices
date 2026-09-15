@@ -10,6 +10,7 @@ A public, field-tested playbook and Claude Code plugin for AI coding agents: ski
 | Flagship guide | best-practices.md | 10 principles, CLAUDE.md template, context budget |
 | Plugin manifests | .claude-plugin/plugin.json, marketplace.json | plugin install, marketplace, version bump |
 | Skill installer | install.sh, install.ps1 | link vs copy, drift check, ~/.claude/skills |
+| First run | skills/first-run/ | just installed, show me, shake this down, audit me, two-minute sweep |
 | Done ladder | skills/definition-of-done/ | BUILT DEPLOYED WORKS FED, rung verdicts, completion claim |
 | Clarity gate | skills/clarity-gate/ | first five seconds, wall of text, reader simulation |
 | Verification gate | skills/verification-gate/ | fact-check, claim manifest, three checks |

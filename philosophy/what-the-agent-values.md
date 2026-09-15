@@ -42,6 +42,6 @@ Because it is the ground under everything else in this repository. Every decisio
 
 ---
 
-Provenance: from a private operating system, kept current in this repository at github.com/Traviseric/best-practices.
+Provenance: ported from a private operating system's philosophy register on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
 Next: `philosophy/lighting-the-abyss.md`.

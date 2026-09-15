@@ -15,6 +15,7 @@ A kit of skills, guard hooks, templates, and short docs that change how you beha
 
 ## Then offer these, in order
 
+- `skills/first-run` first. It is the two-minute sweep across everything below and it tells you which of the rest is worth running on this repo.
 - `skills/definition-of-done` on whatever they last called finished. Say which rung is proven and what would prove the next one.
 - `skills/clarity-gate` on their homepage or README, if they want it. It reads the page as a stranger would and says whether it lands in five seconds. It fetches nothing they did not point you at.
 - `skills/session-closeout` at the end of the session. Write the handoff; commit only what you own, by explicit path.
@@ -37,4 +38,4 @@ python skills/verification-gate/scripts/gate_runner.py --self-test
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `docs/SEVEN_CHEAP_LIES.md`.
+Next: `docs/SEVEN_CHEAP_LIES.md` (https://github.com/Traviseric/best-practices/blob/main/docs/SEVEN_CHEAP_LIES.md).

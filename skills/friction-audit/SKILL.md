@@ -82,6 +82,8 @@ transactions, human decision gates, plan-only modes). Those are enforcement, not
 deleting them breaks the machine rather than de-hedging it. Their prose duplicates are still
 fair game: state each once, delete every echo.
 
+---
+
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `../hedge-audit/SKILL.md`, which classifies the caution the model left in the code rather than the docs.
+Next: `skills/hedge-audit/SKILL.md` (https://github.com/Traviseric/best-practices/blob/main/skills/hedge-audit/SKILL.md), which classifies the caution the model left in the code rather than the docs.

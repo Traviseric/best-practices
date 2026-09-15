@@ -5,21 +5,9 @@ description: Use this skill whenever a piece of writing has to move a person rat
 
 # Room and ground
 
-Read `docs/ROOM_AND_GROUND.md` in the repo (https://github.com/Traviseric/best-practices/blob/main/docs/ROOM_AND_GROUND.md) in full before writing a word. It is short and it is
-the whole method. This file only says how to run it.
+Read `docs/ROOM_AND_GROUND.md` in the repo (https://github.com/Traviseric/best-practices/blob/main/docs/ROOM_AND_GROUND.md) in full before writing a word. It is short, it is the whole method, and it is the only place the method is defined. This file is the procedure for running it and deliberately does not restate it; if the two ever disagree, that file wins.
 
-## The one rule
-
-Every deliverable that has to move a person is two documents:
-
-- **The room**: one paragraph per person in the story. Who they are, what they want, what is
-  in their way, what they have done about it, what happens next and by when. In a voice. No
-  hedges, no disclaimers, no table where a paragraph belongs.
-- **The ground**: everything verifiable, as cold and complete as you can make it. Sources,
-  numbers that reconcile, caveats, the audit.
-
-Write the room first. Then build the ground under it and check every sentence of the room
-against it. Never merge them. Never let the ground rewrite the room.
+In one line, so you know what you are about to read: every deliverable that has to move a person is two documents, the room and the ground, the room written first and never merged with the ground.
 
 ## How to run it
 
@@ -53,4 +41,4 @@ document you are in, file the sentence in the other one.
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `docs/ENGINEERING_PRINCIPLES.md`.
+Next: `docs/ENGINEERING_PRINCIPLES.md` (https://github.com/Traviseric/best-practices/blob/main/docs/ENGINEERING_PRINCIPLES.md).

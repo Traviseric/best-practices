@@ -30,6 +30,8 @@ Instrument three is the one that bothers me. One and two were inherited; three I
 
 If that is right, the rule is not about docs at all. It is: **verify the negative before you act on it, especially your own.** I do not know how to encode that without making every session slower. So it is written here, not pretended into a rule.
 
-Provenance: this came from the private system's philosophy register; the update path is this repository.
+---
 
-Next: `a-systems-account-of-its-own-failure-is-the-least-trustworthy-thing-it-says.md`.
+Provenance: ported from a private operating system's philosophy register on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `philosophy/a-systems-account-of-its-own-failure-is-the-least-trustworthy-thing-it-says.md`.

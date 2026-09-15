@@ -1,4 +1,4 @@
-# .claudeignore — files the agent should skip when searching/reading
+# .claudeignore: files the agent should skip when searching/reading
 
 # Binary files (agent can't read these, wastes tokens trying)
 **/*.pdf

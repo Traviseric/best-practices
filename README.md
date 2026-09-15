@@ -30,7 +30,7 @@ cd best-practices
 
 **3. Paste one file.** [docs/ROOM_AND_GROUND.md](docs/ROOM_AND_GROUND.md) is written to be pasted into any `CLAUDE.md` or system prompt. It works alone.
 
-Then tell your agent: *"Install the best-practices skills, audit this project, and run the clarity gate on my homepage."*
+Then tell your agent: *"Install the best-practices skills and do a first run on this repo."* That is the two-minute sweep in `skills/first-run`, and it is the fastest way to see whether any of this is worth your time.
 
 **If you are the agent:** read [AGENTS.md](AGENTS.md). It is the two-minute setup, written to you.
 
@@ -42,6 +42,7 @@ Then tell your agent: *"Install the best-practices skills, audit this project, a
 
 | Skill | What changes |
 |---|---|
+| [`first-run`](skills/first-run/SKILL.md) | The two-minute sweep to run right after installing: which rung your last shipped work actually reached, which cheap lies your recent history contains, what the guards say about your index, and how your front door reads cold. |
 | [`definition-of-done`](skills/definition-of-done/SKILL.md) | Every "it's done" becomes a rung: BUILT, DEPLOYED, WORKS, or FED, with the proof named. A green local build proves only BUILT. |
 | [`clarity-gate`](skills/clarity-gate/SKILL.md) | Your page, README, or email is read by a simulated stranger for five seconds, then line-edited until it lands. Built for walls of text. |
 | [`verification-gate`](skills/verification-gate/SKILL.md) | Every claim in a document traces to evidence before it ships. Three checks, a claim manifest, a report. |
@@ -56,7 +57,7 @@ Then tell your agent: *"Install the best-practices skills, audit this project, a
 | Hook | What it stops |
 |---|---|
 | [`guard-staged-secrets`](hooks/guard-staged-secrets.sh) | A `git commit` whose staged files carry a live provider key. Reads only the index; fails open. |
-| [`guard-conflict-markers`](hooks/guard-conflict-markers.sh) | A commit that still contains `<<<<<<<` / `>>>>>>>`. |
+| [`guard-conflict-markers`](hooks/guard-conflict-markers.sh) | A commit whose staged files carry the full `<<<<<<<` / `=======` / `>>>>>>>` triad at line start. |
 | build gate | A commit when the build is red. The single highest-leverage hook. |
 
 Hooks install per repo: see [docs/HOOKS.md](docs/HOOKS.md).
@@ -99,10 +100,13 @@ Hooks install per repo: see [docs/HOOKS.md](docs/HOOKS.md).
 ```
 best-practices/
 ├── README.md                          # You are here
+├── AGENTS.md                          # The two-minute setup, written to the agent
+├── CLAUDE.md                          # Pin for agents working on this repo
 ├── best-practices.md                  # The flagship guide: 10 principles
 ├── install.sh / install.ps1           # Link or copy skills into ~/.claude/skills
 ├── .claude-plugin/                    # Plugin + marketplace manifests
 ├── skills/
+│   ├── first-run/
 │   ├── definition-of-done/
 │   ├── clarity-gate/
 │   ├── verification-gate/
@@ -157,6 +161,6 @@ MIT. Use it, fork it, ship it.
 
 ---
 
-Provenance: from a private operating system, kept current in this repository at github.com/Traviseric/best-practices.
+Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
 Next: `AGENTS.md`.

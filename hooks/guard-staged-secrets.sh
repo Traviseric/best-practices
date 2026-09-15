@@ -24,7 +24,7 @@
 # FAILS OPEN: no git, not a repo, missing tools, or any error allows the command.
 #
 # Wiring (Claude Code, .claude/settings.json):
-#   { "matcher": "Bash", "hooks": [ { "type": "command", "if": "Bash(git *)",
+#   { "matcher": "Bash", "hooks": [ { "type": "command", "if": "Bash(git commit *)",
 #     "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard-staged-secrets.sh\"",
 #     "timeout": 30 } ] }
 #

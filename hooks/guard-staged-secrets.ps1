@@ -34,7 +34,7 @@
   the command. A hygiene guard must never be the reason real work cannot proceed.
 
   Wiring (Claude Code, .claude/settings.json):
-    { "matcher": "Bash", "hooks": [ { "type": "command", "if": "Bash(git *)",
+    { "matcher": "Bash", "hooks": [ { "type": "command", "if": "Bash(git commit *)",
       "command": "pwsh -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-staged-secrets.ps1\"",
       "timeout": 30 } ] }
   On Windows PowerShell 5.1 replace `pwsh` with `powershell`.
