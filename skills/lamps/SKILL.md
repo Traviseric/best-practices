@@ -8,7 +8,7 @@ description: Run the fixed set of task-independent questions (the lamps) that li
 The model does not know what it is not asked. Everything it could say is latent until a
 prompt conditions it, so the regions nobody asked about stay dark, and the decider finds them
 first. The lamps are a fixed set of questions, run blind and in parallel at fixed moments,
-independent of the deliverable. Read `../../philosophy/lighting-the-abyss.md` once for why.
+independent of the deliverable. Read `philosophy/lighting-the-abyss.md` (https://github.com/Traviseric/best-practices/blob/main/philosophy/lighting-the-abyss.md) once for why.
 
 ## The set
 
@@ -73,7 +73,7 @@ agents. It found a plugin hook firing on every shell command, a dead link on a p
 thesis was verification, a paid product that was a public file with no lock on it, and a
 paid step pointing at a free course. Three were fixed the same day; the fourth is named as
 open. The reconciled map and what it changed are summarized in
-`../../philosophy/lighting-the-abyss.md`.
+`philosophy/lighting-the-abyss.md` (https://github.com/Traviseric/best-practices/blob/main/philosophy/lighting-the-abyss.md).
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 

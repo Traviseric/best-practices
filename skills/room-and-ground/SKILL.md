@@ -5,7 +5,7 @@ description: Use this skill whenever a piece of writing has to move a person rat
 
 # Room and ground
 
-Read `../../docs/ROOM_AND_GROUND.md` in full before writing a word. It is short and it is
+Read `docs/ROOM_AND_GROUND.md` in the repo (https://github.com/Traviseric/best-practices/blob/main/docs/ROOM_AND_GROUND.md) in full before writing a word. It is short and it is
 the whole method. This file only says how to run it.
 
 ## The one rule

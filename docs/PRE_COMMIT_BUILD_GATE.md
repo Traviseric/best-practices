@@ -22,10 +22,10 @@ Create `.claude/settings.json` in your project root:
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "if": "Bash(git commit:*)",
         "hooks": [
           {
             "type": "command",
+            "if": "Bash(git commit *)",
             "command": "<project-specific build command>",
             "timeout": 180,
             "statusMessage": "Build check before commit..."
@@ -37,7 +37,11 @@ Create `.claude/settings.json` in your project root:
 }
 ```
 
-The hook returns JSON. To block the commit, the command must output `{"continue":false,"reason":"<why>"}`.
+Two details that are easy to get wrong, and both were wrong in this file until a QA pass caught them:
+
+**`if` goes on the hook entry, not on the matcher group.** Put it beside `command`, as above. Put it a level up and it is ignored, and your build runs on every single Bash call the agent makes. The syntax is permission-rule syntax with a space, `Bash(git commit *)`, not a colon.
+
+**The deny format.** To block the commit, the command outputs `{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"<why>"}}`. To allow, output the same shape with `"permissionDecision":"allow"`, or nothing at all. The guards in `hooks/` are working examples.
 
 ---
 
@@ -45,12 +49,12 @@ The hook returns JSON. To block the commit, the command must output `{"continue"
 
 | Stack | Command |
 |-------|---------|
-| Next.js | `cd "<project-path>" && npx next build --no-lint > /dev/null 2>&1 \|\| echo '{"continue":false,"reason":"next build failed"}'` |
-| Python (pytest) | `cd "<project-path>" && python -m pytest --tb=short 2>&1 \|\| echo '{"continue":false,"reason":"tests failed"}'` |
-| TypeScript (tsc) | `cd "<project-path>" && npx tsc --noEmit 2>&1 \|\| echo '{"continue":false,"reason":"type errors"}'` |
-| CDK / SAM | `cd "<project-path>" && npx cdk synth > /dev/null 2>&1 \|\| echo '{"continue":false,"reason":"cdk synth failed"}'` |
-| Go | `cd "<project-path>" && go build ./... 2>&1 \|\| echo '{"continue":false,"reason":"go build failed"}'` |
-| Rust | `cd "<project-path>" && cargo check 2>&1 \|\| echo '{"continue":false,"reason":"cargo check failed"}'` |
+| Next.js | `cd "<project-path>" && npx next build --no-lint > /dev/null 2>&1 \|\| echo '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"next build failed"}}'` |
+| Python (pytest) | `cd "<project-path>" && python -m pytest --tb=short 2>&1 \|\| echo '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"tests failed"}}'` |
+| TypeScript (tsc) | `cd "<project-path>" && npx tsc --noEmit 2>&1 \|\| echo '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"type errors"}}'` |
+| CDK / SAM | `cd "<project-path>" && npx cdk synth > /dev/null 2>&1 \|\| echo '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"cdk synth failed"}}'` |
+| Go | `cd "<project-path>" && go build ./... 2>&1 \|\| echo '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"go build failed"}}'` |
+| Rust | `cd "<project-path>" && cargo check 2>&1 \|\| echo '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"cargo check failed"}}'` |
 
 ---
 

@@ -42,21 +42,21 @@ Then tell your agent: *"Install the best-practices skills, audit this project, a
 
 | Skill | What changes |
 |---|---|
-| `definition-of-done` | Every "it's done" becomes a rung: BUILT, DEPLOYED, WORKS, or FED, with the proof named. A green local build proves only BUILT. |
-| `clarity-gate` | Your page, README, or email is read by a simulated stranger for five seconds, then line-edited until it lands. Built for walls of text. |
-| `verification-gate` | Every claim in a document traces to evidence before it ships. Three checks, a claim manifest, a report. |
-| `session-closeout` | Finish or stop honestly, commit only what you own by explicit path, write a handoff the next session can resume from. |
-| `room-and-ground` | Anything that has to move a person is two documents: the paragraph they carry out, and the cold ground under it. Never merged. |
-| `lamps` | Ten task-independent questions run blind at four moments: who decides, what they default to, who argues against you, where the biggest loss is, the five questions nobody asked. |
-| `hedge-audit` | Classifies every hedge-shaped line in a codebase: refusal artifact, honest stub, or fabricated success. Most are scaffolding; the ones that are not are the bugs. |
-| `friction-audit` | Finds the dead caution the model's own tilt wrote into your rules and copy, and deletes it with a citation or keeps it with one. |
+| [`definition-of-done`](skills/definition-of-done/SKILL.md) | Every "it's done" becomes a rung: BUILT, DEPLOYED, WORKS, or FED, with the proof named. A green local build proves only BUILT. |
+| [`clarity-gate`](skills/clarity-gate/SKILL.md) | Your page, README, or email is read by a simulated stranger for five seconds, then line-edited until it lands. Built for walls of text. |
+| [`verification-gate`](skills/verification-gate/SKILL.md) | Every claim in a document traces to evidence before it ships. Three checks, a claim manifest, a report. |
+| [`session-closeout`](skills/session-closeout/SKILL.md) | Finish or stop honestly, commit only what you own by explicit path, write a handoff the next session can resume from. |
+| [`room-and-ground`](skills/room-and-ground/SKILL.md) | Anything that has to move a person is two documents: the paragraph they carry out, and the cold ground under it. Never merged. |
+| [`lamps`](skills/lamps/SKILL.md) | Ten task-independent questions run blind at four moments: who decides, what they default to, who argues against you, where the biggest loss is, the five questions nobody asked. |
+| [`hedge-audit`](skills/hedge-audit/SKILL.md) | Classifies every hedge-shaped line in a codebase: refusal artifact, honest stub, or fabricated success. Most are scaffolding; the ones that are not are the bugs. |
+| [`friction-audit`](skills/friction-audit/SKILL.md) | Finds the dead caution the model's own tilt wrote into your rules and copy, and deletes it with a citation or keeps it with one. |
 
 **And the reason any of it exists:** [philosophy/](philosophy/README.md), seven short observations about the model itself, each with the incident that earned it and the mechanism it produced. Start with [what the agent values](philosophy/what-the-agent-values.md), written by the model.
 
 | Hook | What it stops |
 |---|---|
-| `guard-staged-secrets` | A `git commit` whose staged files carry a live provider key. Reads only the index; fails open. |
-| `guard-conflict-markers` | A commit that still contains `<<<<<<<` / `>>>>>>>`. |
+| [`guard-staged-secrets`](hooks/guard-staged-secrets.sh) | A `git commit` whose staged files carry a live provider key. Reads only the index; fails open. |
+| [`guard-conflict-markers`](hooks/guard-conflict-markers.sh) | A commit that still contains `<<<<<<<` / `>>>>>>>`. |
 | build gate | A commit when the build is red. The single highest-leverage hook. |
 
 Hooks install per repo: see [docs/HOOKS.md](docs/HOOKS.md).
@@ -79,6 +79,10 @@ Hooks install per repo: see [docs/HOOKS.md](docs/HOOKS.md).
 | Cut MCP token bloat | [docs/MCP_OPTIMIZATION.md](docs/MCP_OPTIMIZATION.md) |
 | Organize messy docs | [docs/DOC_ORGANIZATION.md](docs/DOC_ORGANIZATION.md) |
 | Build sites with agents | [docs/WEB_DESIGN_PRINCIPLES.md](docs/WEB_DESIGN_PRINCIPLES.md) |
+| Add just the build gate | [docs/PRE_COMMIT_BUILD_GATE.md](docs/PRE_COMMIT_BUILD_GATE.md) |
+| Work with an agent that reads AGENTS.md | [docs/AGENTS_MD_CONTRACT.md](docs/AGENTS_MD_CONTRACT.md) |
+| Run tasks across fresh contexts | [docs/PATTERNS.md](docs/PATTERNS.md) |
+| See what this repo's own gates found in it | [docs/receipts/](docs/receipts/) |
 
 ---
 

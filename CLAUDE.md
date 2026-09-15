@@ -56,7 +56,13 @@ Sources by file: skills/* mirror same-named private skills; docs/SEVEN_CHEAP_LIE
 - Bump `version` in both `.claude-plugin/*.json` on any change users should receive.
 
 ## Current Focus
-September 2026 refresh: plugin packaging, five skills, three hooks, the seven cheap lies, room and ground, the insights loop.
+September 2026: eight skills, three hooks, seven philosophy entries, two scar-first principle docs, the seven cheap lies, room and ground, the insights loop. The kit's own gates were then run against the kit; both receipts are in `docs/receipts/` and the defects they found are fixed.
 
 ## Going Deeper
 The deeper material is at https://traviseric.com/claude-code.
+
+---
+
+Provenance: this pin is maintained alongside a private operating system; the update path is this repository at github.com/Traviseric/best-practices.
+
+Next: `README.md` if you are reading the repo, `AGENTS.md` if you are setting it up for someone.

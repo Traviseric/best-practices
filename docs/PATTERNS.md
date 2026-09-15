@@ -97,10 +97,12 @@ On error     → checkpoint
 
 **Implementation**:
 ```python
-def git_checkpoint(project_path, message=None):
-    # Stage everything
-    subprocess.run(["git", "add", "-A"], cwd=project_path)
-    # Commit with timestamp
+def git_checkpoint(project_path, paths, message=None):
+    # Stage ONLY the paths this task owns. Never `git add -A`: in any repo where
+    # more than one session or agent works, it sweeps someone else's in-flight
+    # edits into your commit. See skills/session-closeout and rule 9 of
+    # docs/ENGINEERING_PRINCIPLES.md for what that costs.
+    subprocess.run(["git", "add", *paths], cwd=project_path)
     subprocess.run(["git", "commit", "-m", message], cwd=project_path)
     # Push immediately - don't let commits pile up
     subprocess.run(["git", "push"], cwd=project_path)

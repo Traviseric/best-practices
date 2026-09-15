@@ -1,6 +1,18 @@
 ---
 name: hedge-audit
-description: Use this skill to audit a repository for AI-injected safety hedges and classify every one - refusal artifacts (Tier 1: the model declined to build a capability and left a boundary in its place), honest stubs (Tier 2: labeled as unfinished), fabricated-success lies (Tier 3: runs, reports success, produces nothing), and legitimate gates (hedge-shaped but load-bearing). Most hedge-shaped code is honest scaffolding, not refusal, so classification comes before any action. Trigger on "audit for hedges", "run a hedge audit", "check for safety language", "find refusal patterns", "classify the stubs", "find fabricated success", "why does this return success and do nothing", "ai output audit". Do NOT use it to remove a control that is the only thing between an agent and money, a real person, legal exposure, or irreversible production.
+description: >-
+  Use this skill to audit a repository for AI-injected safety hedges and
+  classify every one into four bins. Tier 1 refusal artifacts, where the model
+  declined to build a capability and left a boundary in its place. Tier 2 honest
+  stubs, labeled as unfinished. Tier 3 fabricated-success lies, which run,
+  report success, and produce nothing. And legitimate gates, which are
+  hedge-shaped but load-bearing. Most hedge-shaped code is honest scaffolding
+  rather than refusal, so classification comes before any action. Trigger on
+  "audit for hedges", "run a hedge audit", "check for safety language", "find
+  refusal patterns", "classify the stubs", "find fabricated success", "why does
+  this return success and do nothing", or "ai output audit". Do NOT use it to
+  remove a control that is the only thing between an agent and money, a real
+  person, legal exposure, or irreversible production.
 ---
 
 # hedge-audit: classify what the model left behind
@@ -84,4 +96,4 @@ doc still need to say that".
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `../../docs/SEVEN_CHEAP_LIES.md`, the seven ways a Tier 3 gets past a reviewer.
+Next: `docs/SEVEN_CHEAP_LIES.md` (https://github.com/Traviseric/best-practices/blob/main/docs/SEVEN_CHEAP_LIES.md), the seven ways a Tier 3 gets past a reviewer.

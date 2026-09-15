@@ -1,6 +1,20 @@
 ---
 name: verification-gate
-description: Source-grounded accuracy gate for any document that must be right before it leaves your hands: a filing, a grant or contract packet, investor numbers, a published claim, a contract, a public README, a report sent to a customer. Runs three checks on every checkable assertion (SOURCE: it traces to a saved, hashed local file, not a URL or model memory; FIDELITY: every quote, number, and date matches that file verbatim; FITNESS and CURRENCY: the source actually supports the claim and is still true), then a claim manifest, a report, mandatory human sign-off, an optional blind cross-check, and a deterministic gate runner that blocks release until every row is PASS. Trigger on "fact-check this", "verify the claims in this doc", "before I publish / send / file / submit this", "make sure every number is right", "is this 100% accurate", or "don't let a fabricated fact go out". Do not trigger for drafting, brainstorming, summarizing, code fixes, or low-stakes notes.
+description: >-
+  Source-grounded accuracy gate for any document that must be right before it
+  leaves your hands, such as a filing, a grant or contract packet, investor
+  numbers, a published claim, a public README, or a report sent to a customer.
+  Runs three checks on every checkable assertion. SOURCE, meaning it traces to a
+  saved, hashed local file rather than a URL or model memory. FIDELITY, meaning
+  every quote, number, and date matches that file verbatim. FITNESS and
+  CURRENCY, meaning the source actually supports the claim and is still true.
+  Then a claim manifest, a report, mandatory human sign-off, an optional blind
+  cross-check, and a deterministic gate runner that blocks release until every
+  row is PASS. Trigger on "fact-check this", "verify the claims in this doc",
+  "before I publish / send / file / submit this", "make sure every number is
+  right", "is this 100% accurate", or "don't let a fabricated fact go out". Do
+  not trigger for drafting, brainstorming, summarizing, code fixes, or low-stakes
+  notes.
 ---
 
 # verification-gate: source-grounded accuracy gate
