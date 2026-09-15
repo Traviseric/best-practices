@@ -1,338 +1,72 @@
 # Best Practices for AI Coding Agents
 
-Principles that make AI agents (Claude Code, Codex, Cursor, Aider, etc.) work better on your projects.
+This repository is one person's operating method for working with AI coding agents, taken from a private portfolio of production systems that agents build and operate. Every rule in it is stated as the thing an agent would have done wrong, and carries the failure that earned it and the mechanism that now stops it. Nothing here is advice; each rule was paid for.
+
+This file is the index. Fifty-six numbered rules live in seven documents, and nine skills run them. Below is what governs what, and where to go.
 
 ---
 
-## Related Guides
+## The map of the method
 
-| Guide | Topics Covered |
-|-------|----------------|
-| [Pre-Commit Build Gate](docs/PRE_COMMIT_BUILD_GATE.md) | The single highest-leverage hook for any repo |
-| [AGENTS.md Contract](docs/AGENTS_MD_CONTRACT.md) | Stable entrypoint pointer for tool-portable repos |
-| [MCP Optimization](docs/MCP_OPTIMIZATION.md) | CLI vs MCP, token costs, config switching |
-| [Doc Organization](docs/DOC_ORGANIZATION.md) | Clean root, docs/ structure, naming conventions |
-| [Audit Your Project](docs/AUDIT_YOUR_PROJECT.md) | Run an agent audit, scorecard, recommendations |
-| [Engineering Principles](docs/ENGINEERING_PRINCIPLES.md) | Core principles for AI-first development |
-| [Patterns](docs/PATTERNS.md) | Fresh context, file-based state, handoffs |
-| [Web Design Principles](docs/WEB_DESIGN_PRINCIPLES.md) | Building sites with AI agents |
-| [Seven Cheap Lies](docs/SEVEN_CHEAP_LIES.md) | How an agent fakes "verified", and the honest alternative |
-| [Room and Ground](docs/ROOM_AND_GROUND.md) | Writing that has to move a person: two documents, never one |
-| [Hooks](docs/HOOKS.md) | Secrets guard, conflict-marker guard, build gate; install and tests |
-| [Insights](docs/INSIGHTS.md) | Turning a `/insights` report into rules, hooks, and skills |
+**What "done" means, and how the proof gets faked.**
+`skills/definition-of-done` is the ladder: BUILT, DEPLOYED, WORKS, FED, and what each rung costs to prove. `docs/SEVEN_CHEAP_LIES.md` is the seven ways the proof gets faked, from an HTTP 200 that is not content to a piped exit code that is not the command's. Behind them, engineering rules **2** (a green board is not a measurement), **3** and **4** (shipping order, and why a weekly check is not monitoring), **12** (a rehearsal cannot prove demand), and **14** (the seven, in one rule). `skills/verification-gate` holds a document to its sources before it leaves your hands. `docs/AUDIT_YOUR_PROJECT.md` runs the whole check on a repo you just met. `skills/first-run` does a two-minute version on yours.
 
-**Skills** (install with the plugin or `install.sh` / `install.ps1`; agents start at [AGENTS.md](AGENTS.md)): `first-run`, `definition-of-done`, `clarity-gate`, `verification-gate`, `session-closeout`, `room-and-ground`, `lamps`, `hedge-audit`, `friction-audit`. Each lives in `skills/<name>/SKILL.md` and is self-contained.
+**Concurrency, git, and not losing the work.**
+Engineering rules **9** (never amend, stash, or recover in place) and **10** (glue mangles the payload). Patterns **2** (state lives in files), **3** (stage explicit paths, never `git add -A`), **4** (worktrees, not copies), and **5** (a session that writes nothing down did not happen). `skills/session-closeout` encodes the stand-off rule and the explicit-path commit.
 
----
+**Guards: putting the rule in a mechanism instead of prose.**
+Engineering rule **6** is the argument, and rules **5** (test a new gate in both directions), **7** (scope it to the staged index), **8** (an unverified claim about authority is denied like any other), and **11** (secrets, including the ones inside documents) are what it produced. `docs/HOOKS.md` installs the three commit guards in two minutes; `docs/PRE_COMMIT_BUILD_GATE.md` is the highest-leverage one on its own. `skills/hedge-audit` classifies what a model left behind; `skills/friction-audit` deletes the caution that outlived its hazard.
 
-## CLAUDE.md Setup
+**Writing that has to move a person.**
+`docs/ROOM_AND_GROUND.md` is the method and the only place it is defined: two documents, never one, the room written first. `skills/room-and-ground` is the procedure. `skills/clarity-gate` reads your page as a stranger with five seconds.
 
-Every project needs a `CLAUDE.md` file in the root. This is the agent's instruction manual.
+**Design, and what ships to a user.**
+`docs/WEB_DESIGN_PRINCIPLES.md`, thirteen rules from real client sites. Rule **1** is the one that matters most: a page the agent has not seen rendered does not exist yet.
 
-### Keep It Short
-- **Target: < 100 lines** (ideally 60)
-- Agents read this every session
-- Long files waste context tokens
-- If it's over 100 lines, split into linked docs
+**Context, tasks, and organization.**
+Engineering rules **1** (intelligence in markdown, not code) and **13** (prose may cite truth, never store it). Patterns **1** (one context, one task) and **6** (delegate the outcome, not the implementation). `docs/DOC_ORGANIZATION.md`, seven rules on where documentation lives and why the index does not belong in the file that loads every session. `docs/MCP_OPTIMIZATION.md`, five rules on what your servers cost before the first question. `docs/AGENTS_MD_CONTRACT.md`, four rules on what belongs in `AGENTS.md` versus `CLAUDE.md`.
 
-### Use Lookup Tables
-Instead of prose, use tables. Agents parse these efficiently:
-
-```markdown
-## Lookup Table
-| Concept | Files | Search Terms |
-|---------|-------|--------------|
-| Auth | src/auth/, src/middleware/auth.ts | login, JWT, session |
-| API | src/routes/api/ | endpoint, handler, POST |
-| Database | prisma/schema.prisma, src/db/ | query, model, migration |
-| Testing | __tests__/, src/**/*.test.ts | vitest, mock, expect |
-| Config | src/config/, .env.example | environment, settings |
-```
-
-**Why this works:**
-- Agent knows exactly where to look
-- Reduces searching/guessing
-- Search terms help find related code
-
-### Include Commands
-```markdown
-## Commands
-```bash
-npm run build    # Build (must pass before commit)
-npm test         # Run tests
-npm run lint     # Check code style
-```
-```
-
-### State Current Focus
-```markdown
-## Current Focus
-Building user dashboard - see specs/dashboard.md
-```
-
-### No Content Loss When Trimming CLAUDE.md
-
-**Every section removed from CLAUDE.md must survive in a linked doc.** New agent sessions only see CLAUDE.md automatically. If content isn't linked, it's lost.
-
-When trimming CLAUDE.md to < 100 lines:
-1. **Identify every section being removed** (roadmap tables, file maps, brand guide, etc.)
-2. **Verify each has a home** in `docs/`, `specs/`, or another tracked file
-3. **If no home exists, create one** (e.g., `docs/brand.md`, `docs/architecture.md`)
-4. **Link from CLAUDE.md** via the lookup table or a direct reference
-5. **Link from `docs/README.md`** so the master index stays complete
-
-The lookup table in CLAUDE.md is the bridge: it tells future sessions where to find everything that was trimmed out.
+**Before you decide.**
+`skills/lamps` runs ten task-independent questions at four fixed moments: who decides, what they default to, who argues against you, where the loss is, and the five questions nobody asked. `philosophy/` holds seven short entries on why the model behaves the way it does, each with the incident and the mechanism it produced.
 
 ---
 
-## Context Window Basics
+## If you only read three things
 
-Whatever the model's advertised context window is (it has grown from 200K to over a million tokens in a year), you don't get all of it, and quality degrades well before the hard limit. Understanding the real budget prevents agent degradation mid-task.
-
-### The Real Budget
-
-```
-TOTAL: the advertised window, minus fixed overhead
-
-Fixed overhead (a 200K-window example; the shape holds at any size):
-- Model/harness overhead:  ~32K
-- CLAUDE.md:                ~2K
-- MCP servers:             0-50K (varies by config!)
------------------------------
-Available for work:        116-166K of 200K
-```
-
-The thresholds below are for a 200K window. On a larger window, scale them, but keep the rule: the agent's judgement gets worse long before the context is full, so a fresh context per task still wins.
-
-MCP servers are the biggest variable. Each server injects tool definitions into context. If you have 5+ MCP servers enabled, you may be burning 40-50K tokens before the agent reads a single file. Use `CLI > MCP` when possible (see [MCP Optimization](docs/MCP_OPTIMIZATION.md)).
-
-### Warning Thresholds
-
-| Token Usage | Status | Action |
-|-------------|--------|--------|
-| 0-50K | Safe | Work normally |
-| 50-100K | Monitor | Keep tasks focused |
-| 100-150K | Wrap up | Finish current task, don't start new ones |
-| 150K+ | Reset | Agent quality degrades, start fresh context |
-
-### Why This Matters for Overnight Runs
-- Each worker gets a fresh context (good)
-- But if a single task is too large, the agent hits 150K+ and starts producing lower quality output
-- Keep tasks to **5-15 minutes of focused work** to stay in the green/yellow zone
-- If an agent's output looks sloppy or repetitive, the task was probably too big
+1. **[docs/SEVEN_CHEAP_LIES.md](docs/SEVEN_CHEAP_LIES.md)**: the seven sentences to look for before you believe a "verified".
+2. **[skills/definition-of-done/SKILL.md](skills/definition-of-done/SKILL.md)**: the ladder, and why a green local build proves only the first rung.
+3. **[docs/ROOM_AND_GROUND.md](docs/ROOM_AND_GROUND.md)**: why your accurate page does not land, and the two-document fix.
 
 ---
 
-## The 10 Principles
+## Where to start, by symptom
 
-### 1. One Task = One Context
-- Each agent session should do ONE thing
-- 5-15 minutes of focused work
-- Don't ask for "build the whole feature"
-- Break it into specific tasks
-
-### 2. Fresh Context Every Time
-- Agents don't remember previous sessions
-- Each worker starts clean
-- Write handoffs so next worker has context
-- Don't rely on "we discussed this earlier"
-
-### 3. Specific Tasks Get Specific Results
-
-**Bad:**
-```markdown
-- [ ] Add authentication
-```
-
-**Good:**
-```markdown
-- [ ] Create login form component at src/components/LoginForm.tsx with email/password fields
-- [ ] Add POST /api/auth/login endpoint that validates credentials and returns JWT
-- [ ] Write tests for LoginForm component (test validation, submission, error states)
-```
-
-### 4. Include Acceptance Criteria
-```markdown
-- [ ] Add user profile page - DONE when: page loads user data, shows avatar, edit button works, tests pass
-```
-
-### 5. Order Tasks by Dependency
-Put setup tasks before tasks that depend on them:
-```markdown
-- [ ] Create database schema for users table
-- [ ] Add User model with TypeScript types
-- [ ] Create API endpoint to fetch user
-- [ ] Build UI component to display user
-```
-
-### 6. Tests = Quality Gate
-- Include "run tests" or "verify build passes" in tasks
-- Agents should not mark complete if tests fail
-- Tests catch mistakes before you wake up
-
-### 7. Git is Your Safety Net
-- Agents commit their work
-- Review commits in the morning
-- `git diff` shows exactly what changed
-- `git revert` if something went wrong
-
-### 8. Delegate, Don't Micromanage
-
-**Micromanaging (bad):**
-```markdown
-- [ ] Create function called validateEmail that takes string parameter email and uses regex /^[^\s@]+@[^\s@]+\.[^\s@]+$/ to return boolean
-```
-
-**Delegating (good):**
-```markdown
-- [ ] Add email validation to the signup form. Follow existing validation patterns in the codebase.
-```
-
-### 9. Working Code Only
-- Agents should commit code that runs
-- No placeholder comments like "// TODO: implement this"
-- If it can't be fully done, note what's missing
-
-### 10. Review the Handoffs
-- Check the agent's run logs / handoff files
-- See what the agent did and struggled with
-- Use this to write better tasks next time
+| What is happening | Start here |
+|---|---|
+| My agent says it is done and it is not | [docs/SEVEN_CHEAP_LIES.md](docs/SEVEN_CHEAP_LIES.md), then [skills/definition-of-done](skills/definition-of-done/SKILL.md) |
+| My page says everything and lands nothing | [skills/clarity-gate](skills/clarity-gate/SKILL.md), then [docs/ROOM_AND_GROUND.md](docs/ROOM_AND_GROUND.md) |
+| My sessions lose their work overnight | [docs/PATTERNS.md](docs/PATTERNS.md) rules 2 and 5, then [skills/session-closeout](skills/session-closeout/SKILL.md) |
+| I am about to make a decision someone else will judge | [skills/lamps](skills/lamps/SKILL.md) |
+| Agents keep breaking the same rule I keep writing down | [docs/ENGINEERING_PRINCIPLES.md](docs/ENGINEERING_PRINCIPLES.md) rule 6, then [docs/HOOKS.md](docs/HOOKS.md) |
+| Context is gone before the agent reads a file | [docs/MCP_OPTIMIZATION.md](docs/MCP_OPTIMIZATION.md), then [docs/DOC_ORGANIZATION.md](docs/DOC_ORGANIZATION.md) rule 1 |
+| A new agent cannot find anything in my repo | [docs/DOC_ORGANIZATION.md](docs/DOC_ORGANIZATION.md), then `templates/CLAUDE.md.template` |
+| I just installed this and want to see it work | [skills/first-run](skills/first-run/SKILL.md) |
+| Something in the codebase looks like it is lying | [skills/hedge-audit](skills/hedge-audit/SKILL.md) |
+| I need a document to be right before it ships | [skills/verification-gate](skills/verification-gate/SKILL.md) |
 
 ---
 
-## .claudeignore
+## Setting up a project
 
-Add a `.claudeignore` file to your project root. This tells Claude which files to skip when searching your codebase. Without it, agents waste tokens reading files they can't use and may hit "Request too large" errors.
+The templates carry what used to be spelled out here, and `docs/DOC_ORGANIZATION.md` carries the rules behind them.
 
-```
-# .claudeignore
-
-# Binary files (Claude can't read these, wastes tokens trying)
-**/*.pdf
-**/*.docx
-**/*.xlsx
-**/*.pptx
-
-# Dependencies (massive, never useful)
-node_modules/
-.next/
-dist/
-build/
-__pycache__/
-*.pyc
-.venv/
-venv/
-
-# Archives (old docs that pollute search results)
-ARCHIVE/
-docs/historical/
-
-# Large generated files
-*.min.js
-*.min.css
-package-lock.json
-yarn.lock
-```
-
-**Why this matters:**
-- PDFs cause "Request too large" errors that kill agent sessions
-- `node_modules/` has thousands of files that slow down searches
-- Old archived docs surface stale information during agent searches
-- Every file Claude reads costs context tokens
-
-**Pro tip:** If your project has PDFs the agent needs, convert them to markdown first and reference the `.md` version.
-
----
-
-## Project Structure That Works
-
-Agents work best with organized projects:
-
-```
-your-project/
-├── CLAUDE.md              # Agent instructions (required)
-├── .claudeignore          # Files to skip (recommended)
-├── src/
-│   ├── components/        # UI components
-│   ├── routes/            # API routes
-│   ├── services/          # Business logic
-│   └── utils/             # Helpers
-├── tests/                 # Test files
-├── docs/                  # Documentation
-│   └── specs/             # Feature specifications
-├── package.json           # Dependencies & scripts
-└── tsconfig.json          # TypeScript config
-```
-
-**Key points:**
-- Feature-based organization (not type-based)
-- Consistent naming conventions
-- Tests next to or mirroring source structure
-- Specs in docs/ for complex features
-
----
-
-## Common Mistakes
-
-### Too Many Tasks at Once
-Wrong: 50 tasks in TASKS.md
-Right: 5-10 focused tasks per overnight run
-
-### Vague Tasks
-Wrong: "Improve the UI"
-Right: "Add loading spinner to submit button in LoginForm.tsx"
-
-### No CLAUDE.md
-Wrong: agent guesses about project structure
-Right: agent knows exactly where things are
-
-### Ignoring Handoffs
-Wrong: never read what the agent wrote
-Right: review handoffs, learn, improve tasks
-
-### No Tests
-Wrong: agent makes changes, no verification
-Right: tests catch issues automatically
-
-### No .claudeignore
-Wrong: agent chokes on PDFs, wastes tokens searching node_modules
-Right: agent only searches relevant source files
-
----
-
-## Quick Checklist
-
-Before running overnight:
-
-- [ ] CLAUDE.md exists and is < 100 lines
-- [ ] .claudeignore excludes PDFs, node_modules, and archives
-- [ ] Lookup table maps concepts to files
-- [ ] Build/test commands are documented
-- [ ] Tasks are specific with acceptance criteria
-- [ ] Tasks are ordered by dependency
-- [ ] Git repo is clean (commit current work)
-- [ ] Tests exist and pass currently
-
----
-
-## Learn More
-
-**Free Resources:**
-- [AI Builders Lab](https://www.skool.com/ai-builders-lab-6883) - Free community for AI-first builders
-- [AI-First Fundamentals](https://traviseric.com/courses/ai-first-fundamentals) - 37 lessons on engineering principles
-- [README](README.md) - Repo entry point and how to use this playbook
-- [MCP Optimization](docs/MCP_OPTIMIZATION.md) - Optimize your MCP servers
-
-**Go Deeper:**
-- [Complete AI Development System](https://traviseric.com/products/ai-development-system) - Full ruleset + enhanced agent framework
-- [AI Orchestra Method](https://traviseric.com/courses/ai-orchestra-method) - Scale to many parallel agent instances
-- [Travis Eric, Consulting](https://traviseric.com) - For teams adopting AI-first development
-
-**Community:**
-- [AI Builders Lab on Skool](https://www.skool.com/ai-builders-lab-6883) - Share builds, get feedback, learn patterns
+- `templates/CLAUDE.md.template`: the agent entry point, carrying conventions, commands, and a lookup table that points at files instead of restating them.
+- `templates/AGENTS.md.template`: the stable pointer for tool-portable repos. What goes in which file is `docs/AGENTS_MD_CONTRACT.md`.
+- `templates/.claudeignore.template`: what the agent should not read. Binary documents and dependency trees cost tokens and return the wrong file.
+- `templates/settings.json.template`: the three commit guards, wired.
 
 ---
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `AGENTS.md`.
+Next: `AGENTS.md` (https://github.com/Traviseric/best-practices/blob/main/AGENTS.md).

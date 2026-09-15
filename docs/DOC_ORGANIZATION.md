@@ -95,4 +95,4 @@ Naming: pick `kebab-case.md` for guides and reserve `UPPER_CASE.md` for the hand
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `best-practices.md` (the lookup-table pattern).
+Next: `best-practices.md` (https://github.com/Traviseric/best-practices/blob/main/best-practices.md), the index of every rule in this repository.

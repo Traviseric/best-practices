@@ -7,7 +7,7 @@ A public, field-tested playbook and Claude Code plugin for AI coding agents: ski
 | Concept | Files | Search Terms |
 |---------|-------|--------------|
 | Repo entry point | README.md | start here, install, what you get |
-| Flagship guide | best-practices.md | 10 principles, CLAUDE.md template, context budget |
+| Index of the method | best-practices.md | where to start by symptom, the rule map, which doc owns what |
 | Plugin manifests | .claude-plugin/plugin.json, marketplace.json | plugin install, marketplace, version bump |
 | Skill installer | install.sh, install.ps1 | link vs copy, drift check, ~/.claude/skills |
 | First run | skills/first-run/ | just installed, show me, shake this down, audit me, two-minute sweep |

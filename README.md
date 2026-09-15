@@ -68,7 +68,7 @@ Hooks install per repo: see [docs/HOOKS.md](docs/HOOKS.md).
 
 | If you want to... | Read this |
 |---|---|
-| Get the principles fast | [best-practices.md](best-practices.md) |
+| Find the right rule fast | [best-practices.md](best-practices.md), the index of all 56 |
 | Stop your agent lying to you about "verified" | [docs/SEVEN_CHEAP_LIES.md](docs/SEVEN_CHEAP_LIES.md) |
 | Understand why the model does that | [philosophy/](philosophy/README.md) |
 | Engineering rules with the failure that earned each one | [docs/ENGINEERING_PRINCIPLES.md](docs/ENGINEERING_PRINCIPLES.md) |
@@ -102,7 +102,7 @@ best-practices/
 ├── README.md                          # You are here
 ├── AGENTS.md                          # The two-minute setup, written to the agent
 ├── CLAUDE.md                          # Pin for agents working on this repo
-├── best-practices.md                  # The flagship guide: 10 principles
+├── best-practices.md                  # The index: every rule, grouped by what it governs
 ├── install.sh / install.ps1           # Link or copy skills into ~/.claude/skills
 ├── .claude-plugin/                    # Plugin + marketplace manifests
 ├── skills/
