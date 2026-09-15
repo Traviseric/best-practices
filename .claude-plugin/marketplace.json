@@ -1,5 +1,6 @@
 {
   "name": "traviseric",
+  "description": "Field-tested engineering practice for AI coding agents, packaged from a private multi-repository operating system: skills that change what an agent claims and how it verifies, commit guards that stop secrets and conflict markers, and the incidents that earned every rule.",
   "owner": {
     "name": "Travis Eric",
     "url": "https://traviseric.com"
