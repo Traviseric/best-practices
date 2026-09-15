@@ -70,6 +70,27 @@ Same shape: read stdin JSON, scope to the command you care about, read only the 
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
+## Recorded tests
+
+Run 2026-09-14 against `hooks/guard-staged-secrets.sh` and `hooks/guard-conflict-markers.sh` in a throwaway git repository, feeding each script the hook payload on stdin. Reproduce them yourself: `git init` a scratch repo, stage the file described, and pipe `{"tool_input":{"command":"git commit -m x"},"cwd":"<repo>"}` into the script.
+
+To keep this file free of key-shaped strings, the cases below describe the shape instead of printing it. Build each one by concatenating the prefix with random alphanumerics of the stated length.
+
+| Case | Staged content | Expected | Result |
+|---|---|---|---|
+| Stripe live key | a JS line assigning the Stripe live prefix plus 24 mixed-case alphanumerics | deny | **deny**, named the file and "Stripe live key" |
+| Anthropic key | an env line assigning the Anthropic key prefix plus 45 mixed-case alphanumerics | deny | **deny**, named the file and "Anthropic API key" |
+| Both staged together | the two files above | deny, both listed | **deny**, "2 staged file(s)", both named |
+| Obvious placeholder | the Stripe live prefix followed by 22 zeros and two letters | allow | **allow** (placeholder forms are exempt by design) |
+| Clean stage | a text file with no key shape | allow | **allow** |
+| Conflict markers | a file with `<<<<<<<` / `=======` / `>>>>>>>` at line start | deny | **deny**, named the file |
+| Non-commit command | payload command is `git status` | allow | **allow** (only `git commit` is in scope) |
+| Malformed payload | `not json` on stdin | allow (fail open) | **allow** |
+
+One more result, unplanned and worth having: the first attempt to publish this table was **rejected by GitHub push protection**, because a table of realistic test keys is indistinguishable from a leak. That is the correct behavior from a second, independent guard, and it is why the cases above describe shapes rather than print them. Two lessons: write your fixtures so they cannot be mistaken for the real thing, and do not treat your own guard as the only one in the chain.
+
+The PowerShell twins were exercised the same way when they were written, including the fail-open path on malformed JSON. The bash scripts do the whole scan in one `python3` process when python3 exists; without it they fall back to a shell loop that has stalled intermittently on Git Bash, so on Windows without python3 prefer the `.ps1` forms.
+
 Note on `install.sh --check`: it compares the copies in `~/.claude/skills` with this repo. If another system already installs skills with the same names there (the author's own machines do), the check reports drift that is not yours. Test against a throwaway home (`HOME=/tmp/x ./install.sh`) before reading a drift report as a bug.
 
 Next: `docs/SEVEN_CHEAP_LIES.md`.

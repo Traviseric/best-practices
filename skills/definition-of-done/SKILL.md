@@ -144,4 +144,4 @@ blocker, and stop there.
 
 Provenance: ported from a private operating system on 2026-09-14; the update path is this repository at github.com/Traviseric/best-practices.
 
-Next: `README.md` (the loop closes here; start again at the top).
+Next: nothing. This is the end of the path, and the path was: README, AGENTS, the seven cheap lies, the philosophy, the lamps, room and ground, the two principle docs, this ladder. Stop reading and run one of them against something you shipped this week. If you want the map again it is in `README.md`.

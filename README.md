@@ -4,7 +4,9 @@ You are using Claude in the terminal and you can feel that someone else gets mor
 
 This repo is the part of one person's operating method that transfers without him in the room. Install it and your agent starts asking which rung of "done" it has actually proven, refuses to commit a secret, closes a session with a handoff you can resume, and reads your homepage the way a stranger does in the first five seconds.
 
-Built by [Travis Eric](https://traviseric.com/claude-code) from running production agent fleets across 137 repositories (counted 2026-09-01). Tool-agnostic where it can be; examples use Claude Code because that is what I run.
+Built by [Travis Eric](https://traviseric.com/claude-code) from running agent fleets across a large private portfolio. That portfolio is private, so take the claim at zero and check the parts you can reach instead: the incidents in these docs are dated and specific, `python skills/verification-gate/scripts/gate_runner.py --self-test` runs, the guard hooks have their recorded tests in [docs/HOOKS.md](docs/HOOKS.md), and the live systems are listed at [traviseric.com/claude-code](https://traviseric.com/claude-code) as URLs you can open. A number I ask you to believe is worth less than a command you can run.
+
+Tool-agnostic where it can be; examples use Claude Code because that is what I run.
 
 ---
 
@@ -31,6 +33,8 @@ cd best-practices
 Then tell your agent: *"Install the best-practices skills, audit this project, and run the clarity gate on my homepage."*
 
 **If you are the agent:** read [AGENTS.md](AGENTS.md). It is the two-minute setup, written to you.
+
+**The reading path**, if you would rather read than install. Each file ends with one `Next:` hop and the path has an end, not a circle: [AGENTS.md](AGENTS.md), [the seven cheap lies](docs/SEVEN_CHEAP_LIES.md), [the philosophy](philosophy/README.md), [the lamps](skills/lamps/SKILL.md), [room and ground](skills/room-and-ground/SKILL.md), [engineering](docs/ENGINEERING_PRINCIPLES.md), [web design](docs/WEB_DESIGN_PRINCIPLES.md), [the done ladder](skills/definition-of-done/SKILL.md). Roughly an hour. If you only want the two files that people actually steal, they are the seven cheap lies and the done ladder.
 
 ---
 

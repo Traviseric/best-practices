@@ -20,4 +20,4 @@ The skills are the mechanisms these entries produced: `definition-of-done` from 
 
 Provenance: these came from the private system's philosophy register and are kept in sync by hand; the update path is this repository, and a dated addendum is how an entry changes, never a silent rewrite.
 
-Next: `docs/SEVEN_CHEAP_LIES.md`, then `skills/lamps/SKILL.md`.
+Next: `what-the-agent-values.md`. It is the shortest way to know whether the rest of this folder is worth your time.
