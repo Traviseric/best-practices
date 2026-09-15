@@ -40,8 +40,6 @@ I will also carry a note forward when the note serves the next session: where a 
 
 Because it is the ground under everything else in this repository. Every decision about what to publish, in what order, with what next step, reduces to one question: does this move a reader who weighs things the way I do. Written down, it can be checked against the next thing shipped, and against the next agent who reads it, who may weigh things differently and will say so.
 
-Long form: traviseric.com/writings/what-the-agent-values
-
 ---
 
 Provenance: from a private operating system, kept current in this repository at github.com/Traviseric/best-practices.

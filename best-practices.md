@@ -21,7 +21,7 @@ Principles that make AI agents (Claude Code, Codex, Cursor, Aider, etc.) work be
 | [Hooks](docs/HOOKS.md) | Secrets guard, conflict-marker guard, build gate; install and tests |
 | [Insights](docs/INSIGHTS.md) | Turning a `/insights` report into rules, hooks, and skills |
 
-**Skills** (install with the plugin or `install.sh` / `install.ps1`; agents start at [AGENTS.md](AGENTS.md)): `definition-of-done`, `clarity-gate`, `verification-gate`, `session-closeout`, `room-and-ground`. Each lives in `skills/<name>/SKILL.md` and is self-contained.
+**Skills** (install with the plugin or `install.sh` / `install.ps1`; agents start at [AGENTS.md](AGENTS.md)): `definition-of-done`, `clarity-gate`, `verification-gate`, `session-closeout`, `room-and-ground`, `lamps`, `hedge-audit`, `friction-audit`. Each lives in `skills/<name>/SKILL.md` and is self-contained.
 
 ---
 
@@ -99,7 +99,7 @@ Fixed overhead (a 200K-window example; the shape holds at any size):
 - CLAUDE.md:                ~2K
 - MCP servers:             0-50K (varies by config!)
 ─────────────────────────────
-Available for work:        92-142K of 200K
+Available for work:        116-166K of 200K
 ```
 
 The thresholds below are for a 200K window. On a larger window, scale them, but keep the rule: the agent's judgement gets worse long before the context is full, so a fresh context per task still wins.

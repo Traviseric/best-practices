@@ -1,6 +1,8 @@
 # Engineering Principles for AI Projects
 
-Fourteen rules, each stated as the thing an agent would have done wrong, each with the failure that earned it and the mechanism that now stops it. None of them is advice. Every one was paid for, in one private portfolio of production systems run mostly by agents, between mid-2025 and September 2026. Dates are by month. Names are removed. The mechanisms are real and most of them ship in this repository.
+Fourteen rules, each stated as the thing an agent would have done wrong, each with the failure that earned it and the mechanism that now stops it. None of them is advice. Every one was paid for, in one private portfolio of production systems run mostly by agents, between mid-2025 and September 2026.
+
+**Take the incidents at zero.** That portfolio is private, so you cannot check any of these stories, and you should not extend them credit you have not verified. What you can reach: five of the fourteen mechanisms ship in this repository as something you can run (rules 3 and 4's ordering discipline in `skills/definition-of-done`, rule 7's staged-only guard in `hooks/`, rule 11's secret guard with its recorded tests in `docs/HOOKS.md`, rule 14's list in `docs/SEVEN_CHEAP_LIES.md`). The other nine describe guards that live in the private system; they are written so you can build your own, not so you can install mine. Where a mechanism is described in the present tense below, it exists there, not here. Dates are by month. Names are removed. The mechanisms are real and most of them ship in this repository.
 
 If you only read one thing: rule 3 and rule 6 together explain why this document is not a checklist. The checklist existed. It was scheduled for the following Monday.
 
@@ -20,7 +22,7 @@ If you only read one thing: rule 3 and rule 6 together explain why this document
 
 **The rule.** "We did not measure this" is never a negative finding. A board that cannot say "unmeasured" will eventually say "false" instead.
 
-**The incident.** August 2026: a capability matrix reported that all 22 client sites "break first at owner login". Every word was defensible and the conclusion was false. Of the 22, one had an observed, attributable failure; one was ambiguous; twenty-one had never been walked at all; eight had passed. Days went into a fleet-wide outage that had never existed, because three states had been collapsed into the word "breaks".
+**The incident.** August 2026: a capability matrix reported that all 22 client sites "break first at owner login". Every word was defensible and the conclusion was false. Of the 22, exactly one had an observed, attributable failure. One was ambiguous. The other twenty had never been walked at all. Days went into a fleet-wide outage that had never existed, because three states had been collapsed into the word "breaks".
 
 **The mechanism.** A determinacy contract: every board cell carries a confidence state (observed / assumed / never checked) orthogonal to the completeness ladder, checked by a script with a baseline that may only shrink.
 

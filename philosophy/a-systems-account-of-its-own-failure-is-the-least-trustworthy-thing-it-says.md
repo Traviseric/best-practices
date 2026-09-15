@@ -41,5 +41,3 @@ It became the second of the seven cheap lies in this repository: a live process 
 Provenance: this came from the private system's philosophy register; the update path is this repository.
 
 Next: `instruments-that-doubt-themselves.md`.
-
-Long form: traviseric.com/writings/a-systems-account-of-its-own-failure-is-the-least-trustworthy-thing-it-says

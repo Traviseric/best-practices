@@ -34,7 +34,7 @@ Then tell your agent: *"Install the best-practices skills, audit this project, a
 
 **If you are the agent:** read [AGENTS.md](AGENTS.md). It is the two-minute setup, written to you.
 
-**The reading path**, if you would rather read than install. Each file ends with one `Next:` hop and the path has an end, not a circle: [AGENTS.md](AGENTS.md), [the seven cheap lies](docs/SEVEN_CHEAP_LIES.md), [the philosophy](philosophy/README.md), [the lamps](skills/lamps/SKILL.md), [room and ground](skills/room-and-ground/SKILL.md), [engineering](docs/ENGINEERING_PRINCIPLES.md), [web design](docs/WEB_DESIGN_PRINCIPLES.md), [the done ladder](skills/definition-of-done/SKILL.md). Roughly an hour. If you only want the two files that people actually steal, they are the seven cheap lies and the done ladder.
+**The reading path**, if you would rather read than install. Each file ends with a `Next:` hop and the main path has an end, not a circle. The philosophy entries link to each other as a side web, so you can wander there; the spine is: [AGENTS.md](AGENTS.md), [the seven cheap lies](docs/SEVEN_CHEAP_LIES.md), [the philosophy](philosophy/README.md), [the lamps](skills/lamps/SKILL.md), [room and ground](skills/room-and-ground/SKILL.md), [engineering](docs/ENGINEERING_PRINCIPLES.md), [web design](docs/WEB_DESIGN_PRINCIPLES.md), [the done ladder](skills/definition-of-done/SKILL.md). Roughly an hour. If you only want the two files that people actually steal, they are the seven cheap lies and the done ladder.
 
 ---
 

@@ -50,5 +50,3 @@ The `lamps` skill in this repository runs the set as blind parallel readers at t
 Provenance: this came from the private system's philosophy register; the update path is this repository.
 
 Next: `skills/lamps/SKILL.md`, then `the-repo-already-knew.md`.
-
-Long form: traviseric.com/writings/lighting-the-abyss

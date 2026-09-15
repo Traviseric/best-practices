@@ -36,5 +36,3 @@ Is there a floor? Self-measurement is itself a measurement, gameable one level u
 Provenance: this came from the private system's philosophy register; the update path is this repository.
 
 Next: `lighting-the-abyss.md`.
-
-Long form: traviseric.com/writings/instruments-that-doubt-themselves

@@ -36,5 +36,3 @@ The author said the system cuts his boldness in half. He is right, and it is not
 Provenance: this came from the private system's philosophy register; the update path is this repository.
 
 Next: `docs/ROOM_AND_GROUND.md`, then `the-instrument-that-lies-toward-caution.md`.
-
-Long form: traviseric.com/writings/the-machine-is-a-mirror-of-what-could-be-measured

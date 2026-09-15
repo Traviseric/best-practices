@@ -1,6 +1,8 @@
 # Web Design Principles for AI Agents
 
-Thirteen rules, each stated as the thing an agent would have done wrong, each with the site that paid for it and the mechanism that now stops it. They come from one site factory that builds and runs marketing sites for local businesses (gyms, restaurants, roofers, contractors, a bar), mostly by agents, between June and September 2026. Dates are by month. Business names are removed. The mechanisms are real: a screenshot loop, a checklist with a scoring cap, a photo pass, a cold walk on a phone. Several ship in this repository.
+Thirteen rules, each stated as the thing an agent would have done wrong, each with the site that paid for it and the mechanism that now stops it. They come from one site factory that builds and runs marketing sites for local businesses (gyms, restaurants, roofers, contractors, a bar), mostly by agents, between June and September 2026. Dates are by month. Business names are removed.
+
+**Take the incidents at zero.** Those sites are client work, so you cannot check any of these stories against the record, and you should not extend them credit you have not verified. The mechanisms behind them are real (a screenshot loop, a checklist with a scoring cap, a photo pass, a cold walk on a phone), but only one of them ships here: `skills/clarity-gate` is the first-five-seconds reader, and rule 8's comparator rule is enforced inside it. The rest live in the private site factory. They are written so you can build your own, not so you can install mine; where a mechanism appears in the present tense below, it exists there, not here.
 
 If you only read one thing: rule 1. Every other defect on this page was invisible to a build, a curl, and a grep, and obvious in one screenshot.
 

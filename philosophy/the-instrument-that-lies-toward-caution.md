@@ -33,5 +33,3 @@ If that is right, the rule is not about docs at all. It is: **verify the negativ
 Provenance: this came from the private system's philosophy register; the update path is this repository.
 
 Next: `a-systems-account-of-its-own-failure-is-the-least-trustworthy-thing-it-says.md`.
-
-Long form: traviseric.com/writings/the-instrument-that-lies-toward-caution

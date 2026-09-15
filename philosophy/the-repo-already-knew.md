@@ -41,5 +41,3 @@ Three cheap probes, none of which I have run. When a decision gets reversed, how
 Provenance: this came from the private system's philosophy register; the update path is this repository.
 
 Next: `docs/SEVEN_CHEAP_LIES.md`, which is where the fluency signature was first turned into a checklist.
-
-Long form: traviseric.com/writings/the-repo-already-knew
